@@ -53,6 +53,35 @@
       </div>
     </section>
 
+    <section class="como-funciona" style="padding: 80px 40px; background: #061326; border-top: 1px solid rgba(255,255,255,0.05);">
+      <div style="max-width: 900px; margin: 0 auto; text-align: center;">
+        <h2 class="reveal" style="font-family: Georgia, serif; color: #4a7ba5; font-size: 32px; margin-bottom: 15px; text-transform: uppercase;">Como Funciona</h2>
+        <p class="reveal" style="color: rgba(255,255,255,0.6); margin-bottom: 50px;">Seu ensaio em 3 passos simples e transparentes.</p>
+        
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 40px;">
+          
+          <div class="reveal" style="flex: 1; min-width: 200px;">
+            <div style="width: 60px; height: 60px; background: #e06d24; color: #fff; font-size: 24px; font-weight: bold; display: flex; align-items: center; justify-content: center; border-radius: 50%; margin: 0 auto 20px;">1</div>
+            <h4 style="font-size: 18px; margin-bottom: 10px;">Agendamento</h4>
+            <p style="color: rgba(255,255,255,0.6); font-size: 14px;">Você entra em contato via WhatsApp ou Chatbot e escolhemos juntos a melhor data e local.</p>
+          </div>
+
+          <div class="reveal" style="flex: 1; min-width: 200px; transition-delay: 0.2s;">
+            <div style="width: 60px; height: 60px; background: #e06d24; color: #fff; font-size: 24px; font-weight: bold; display: flex; align-items: center; justify-content: center; border-radius: 50%; margin: 0 auto 20px;">2</div>
+            <h4 style="font-size: 18px; margin-bottom: 10px;">A Sessão</h4>
+            <p style="color: rgba(255,255,255,0.6); font-size: 14px;">Um dia descontraído de fotos. Nós levamos a beca, o capelo e toda a iluminação profissional.</p>
+          </div>
+
+          <div class="reveal" style="flex: 1; min-width: 200px; transition-delay: 0.4s;">
+            <div style="width: 60px; height: 60px; background: #e06d24; color: #fff; font-size: 24px; font-weight: bold; display: flex; align-items: center; justify-content: center; border-radius: 50%; margin: 0 auto 20px;">3</div>
+            <h4 style="font-size: 18px; margin-bottom: 10px;">Entrega</h4>
+            <p style="color: rgba(255,255,255,0.6); font-size: 14px;">As fotos passam por tratamento de cor de alto nível e são entregues em uma galeria digital privativa.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
     <section class="portfolio" id="portfolio">
       <div class="portfolio-text reveal">
         <h2>Portfólio</h2>

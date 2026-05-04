@@ -9,6 +9,20 @@ body {
   color: #fff;
   font-family: Arial, Helvetica, sans-serif;
   overflow-x: hidden;
+  /* TRUQUE PARA O RODAPÉ FICAR LÁ EMBAIXO: */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; 
+}
+
+/* Empurra o footer sempre para o final da tela */
+.footer {
+  margin-top: auto !important; 
+}
+
+/* Empurra o footer sempre para o final da tela */
+.footer {
+  margin-top: auto !important; 
 }
 
 /* --- CLASSES DE ANIMAÇÃO E TRANSIÇÃO --- */
