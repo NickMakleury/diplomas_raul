@@ -1209,8 +1209,180 @@ body {
 }
 
 /* =========================================
-   RESPONSIVIDADE COMPLETA
+   DEPOIMENTOS (TESTIMONIALS)
    ========================================= */
+.testimonials {
+  background: linear-gradient(180deg, #061326 0%, #081a33 100%);
+  padding: 50px 65px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.testimonials-text {
+  text-align: center;
+  margin-bottom: 45px;
+}
+
+.testimonials-text h2 {
+  font-family: Georgia, serif;
+  text-transform: uppercase;
+  color: #4a7ba5;
+  font-size: 42px;
+  font-weight: normal;
+}
+
+.testimonials-text .line {
+  margin: 18px auto 22px;
+  background: #4a7ba5;
+}
+
+.testimonials-text p {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 16px;
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+}
+
+.testimonial-card {
+  background: #1c2b4a;
+  padding: 30px 25px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: center;
+  transition: 0.4s ease;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  border-color: rgba(224, 109, 36, 0.3);
+}
+
+.testimonial-stars {
+  color: #e06d24;
+  font-size: 18px;
+  letter-spacing: 3px;
+  margin-bottom: 18px;
+}
+
+.testimonial-quote {
+  font-family: Georgia, serif;
+  font-size: 15px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.85);
+  font-style: italic;
+  margin-bottom: 20px;
+}
+
+.testimonial-author {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 15px;
+}
+
+.testimonial-author strong {
+  display: block;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.testimonial-author span {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 13px;
+}
+
+/* =========================================
+   FAQ ACCORDION
+   ========================================= */
+.faq {
+  background: #061326;
+  padding: 50px 65px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.faq-text {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.faq-text h2 {
+  font-family: Georgia, serif;
+  text-transform: uppercase;
+  color: #4a7ba5;
+  font-size: 42px;
+  font-weight: normal;
+}
+
+.faq-text .line {
+  margin: 18px auto 22px;
+  background: #4a7ba5;
+}
+
+.faq-text p {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 16px;
+}
+
+.faq-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.faq-item {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 10px;
+}
+
+.faq-question {
+  width: 100%;
+  background: transparent;
+  border: none;
+  padding: 20px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  text-align: left;
+  transition: 0.3s ease;
+}
+
+.faq-question span:first-child {
+  font-family: Georgia, serif;
+  font-size: 16px;
+  color: #fff;
+  font-weight: 500;
+}
+
+.faq-icon {
+  color: #e06d24;
+  font-size: 24px;
+  font-weight: 300;
+  transition: transform 0.3s ease;
+}
+
+.faq-question:hover {
+  background: rgba(224, 109, 36, 0.05);
+}
+
+.faq-question:hover .faq-icon {
+  transform: rotate(45deg);
+}
+
+/* Estado ativo (expandido) */
+.faq-item.active .faq-question {
+  background: rgba(224, 109, 36, 0.08);
+}
+
+.faq-item.active .faq-icon {
+  transform: rotate(45deg);
+  color: #e06d24;
+}
+
+/* Resposta do FAQ */
 
 /* Tablet (768px - 899px) */
 @media (max-width: 899px) {

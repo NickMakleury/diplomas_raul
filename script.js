@@ -191,9 +191,34 @@ reveals.forEach(reveal => revealOnScroll.observe(reveal));
   };
 
 // =========================================================
-  // 4. MÓDULO DE INTERAÇÕES E CTAs (Botões e Notificações)
-  // =========================================================
-  const initInteractions = () => {
+// 4. MÓDULO FAQ ACCORDION
+// =========================================================
+  const initFAQ = () => {
+    const faqItems = document.querySelectorAll('.faq-item');
+    
+    if (faqItems.length === 0) return;
+
+    faqItems.forEach(item => {
+      const question = item.querySelector('.faq-question');
+      
+      // Click toggle
+      question.addEventListener('click', () => {
+        const isActive = item.classList.contains('active');
+        
+        // Close all items first (accordion behavior)
+        faqItems.forEach(i => i.classList.remove('active'));
+        
+        // If wasn't active, open it
+        if (!isActive) {
+          item.classList.add('active');
+        }
+      });
+
+      // Keyboard accessibility (Enter or Space)
+      question.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          question.click();
     
     // Sistema Avançado de Toast (Substitui o "alert" feio do navegador)
     const showToast = (message) => {
@@ -275,7 +300,45 @@ reveals.forEach(reveal => revealOnScroll.observe(reveal));
   initUI();
   initEffects();
   initChatbot();
-  initInteractions();
+initInteractions();
+
+  // =========================================================
+  // 5. MÓDULO FAQ ACCORDION
+  // =========================================================
+  const initFAQ = () => {
+    const faqItems = document.querySelectorAll('.faq-item');
+    
+    if (faqItems.length === 0) return;
+
+    faqItems.forEach(item => {
+      const question = item.querySelector('.faq-question');
+      
+      question.addEventListener('click', () => {
+        // Verifica se este item já está ativo
+        const isActive = item.classList.contains('active');
+        
+        // Fecha todos os outros itens (accordion behavior)
+        faqItems.forEach(otherItem => {
+          otherItem.classList.remove('active');
+        });
+        
+        // Se não estava ativo, abre este; se estava, fecha (toggle)
+        if (!isActive) {
+          item.classList.add('active');
+        }
+      });
+
+      // Suporte para teclado (Enter/Space)
+      question.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          question.click();
+        }
+      });
+    });
+  };
+
+  initFAQ();
 
 });
   
