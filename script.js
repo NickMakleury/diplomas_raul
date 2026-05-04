@@ -335,6 +335,64 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }, { threshold: 0.15 });
 
+});
+// =========================================================
+// SCRIPT PRINCIPAL - ARQUITETURA MODULAR (CLEAN CODE)
+// =========================================================
+
+document.addEventListener("DOMContentLoaded", () => {
+  
+  // ---------------------------------------------------------
+  // 0. ASSINATURA DE DEV SÊNIOR NO CONSOLE (EASTER EGG)
+  // ---------------------------------------------------------
+  console.log(
+    "%c 📸 Diplomas Raúl | Desenvolvido com excelência %c\nSeja bem-vindo ao console! Código estruturado com padrões modulares, ES6+ e foco em UX/A11y.", 
+    "background: #0a1128; color: #e06d24; font-size: 16px; font-weight: bold; border: 1px solid #e06d24; border-radius: 4px; padding: 10px;",
+    "color: #4a7ba5; font-size: 12px; font-style: italic; padding-top: 5px;"
+  );
+
+  // ---------------------------------------------------------
+  // 1. MÓDULO DE INTERFACE GERAL (Header, Progresso, Ano)
+  // ---------------------------------------------------------
+  const initUI = () => {
+    const footerYear = document.querySelector('.footer p');
+    if (footerYear) {
+      const currentYear = new Date().getFullYear();
+      footerYear.innerHTML = `© ${currentYear} Diplomas Raúl. Todos os direitos reservados.`;
+    }
+
+    const header = document.querySelector('.header');
+    const progressBar = document.getElementById('scroll-progress');
+
+    window.addEventListener('scroll', () => {
+      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrollPercentage = (scrollTop / scrollHeight) * 100;
+      
+      if (progressBar) progressBar.style.width = scrollPercentage + '%';
+
+      if (window.scrollY > 50) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+  };
+
+  // ---------------------------------------------------------
+  // 2. MÓDULO DE EFEITOS ESPECIAIS (Scroll Reveal & Parallax)
+  // ---------------------------------------------------------
+  const initEffects = () => {
+    const reveals = document.querySelectorAll(".reveal");
+    const revealOnScroll = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("active");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
     reveals.forEach(reveal => revealOnScroll.observe(reveal));
 
     const hero = document.querySelector('.hero');
