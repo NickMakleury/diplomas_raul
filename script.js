@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }, { threshold: 0.15 });
 
-reveals.forEach(reveal => revealOnScroll.observe(reveal));
+    reveals.forEach(reveal => revealOnScroll.observe(reveal));
   };
 
   // ---------------------------------------------------------
@@ -190,35 +190,10 @@ reveals.forEach(reveal => revealOnScroll.observe(reveal));
     });
   };
 
-// =========================================================
-// 4. MÓDULO FAQ ACCORDION
-// =========================================================
-  const initFAQ = () => {
-    const faqItems = document.querySelectorAll('.faq-item');
-    
-    if (faqItems.length === 0) return;
-
-    faqItems.forEach(item => {
-      const question = item.querySelector('.faq-question');
-      
-      // Click toggle
-      question.addEventListener('click', () => {
-        const isActive = item.classList.contains('active');
-        
-        // Close all items first (accordion behavior)
-        faqItems.forEach(i => i.classList.remove('active'));
-        
-        // If wasn't active, open it
-        if (!isActive) {
-          item.classList.add('active');
-        }
-      });
-
-      // Keyboard accessibility (Enter or Space)
-      question.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          question.click();
+  // ---------------------------------------------------------
+  // 4. MÓDULO DE INTERAÇÕES E CTAs (Botões e Notificações)
+  // ---------------------------------------------------------
+  const initInteractions = () => {
     
     // Sistema Avançado de Toast (Substitui o "alert" feio do navegador)
     const showToast = (message) => {
@@ -294,51 +269,36 @@ reveals.forEach(reveal => revealOnScroll.observe(reveal));
     }
   };
 
+  // ---------------------------------------------------------
+  // 5. MÓDULO DO MENU MOBILE (Isto estava faltando!)
+  // ---------------------------------------------------------
+  const initMobileMenu = () => {
+    const hamburger = document.querySelector('.hamburger');
+    const menu = document.querySelector('.menu');
+    const menuLinks = document.querySelectorAll('.menu a');
+
+    if (hamburger && menu) {
+      hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('active');
+        menu.classList.toggle('active');
+      });
+
+      menuLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          hamburger.classList.remove('active');
+          menu.classList.remove('active');
+        });
+      });
+    }
+  };
+
   // =========================================================
   // BOOTSTRAP - INICIALIZAÇÃO DA APLICAÇÃO
   // =========================================================
   initUI();
   initEffects();
   initChatbot();
-initInteractions();
-
-  // =========================================================
-  // 5. MÓDULO FAQ ACCORDION
-  // =========================================================
-  const initFAQ = () => {
-    const faqItems = document.querySelectorAll('.faq-item');
-    
-    if (faqItems.length === 0) return;
-
-    faqItems.forEach(item => {
-      const question = item.querySelector('.faq-question');
-      
-      question.addEventListener('click', () => {
-        // Verifica se este item já está ativo
-        const isActive = item.classList.contains('active');
-        
-        // Fecha todos os outros itens (accordion behavior)
-        faqItems.forEach(otherItem => {
-          otherItem.classList.remove('active');
-        });
-        
-        // Se não estava ativo, abre este; se estava, fecha (toggle)
-        if (!isActive) {
-          item.classList.add('active');
-        }
-      });
-
-      // Suporte para teclado (Enter/Space)
-      question.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          question.click();
-        }
-      });
-    });
-  };
-
-  initFAQ();
+  initInteractions();
+  initMobileMenu();
 
 });
-  
