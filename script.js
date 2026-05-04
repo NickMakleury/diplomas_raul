@@ -332,10 +332,10 @@ document.addEventListener("DOMContentLoaded", () => {
           entry.target.classList.add("active");
           observer.unobserve(entry.target);
         }
-      });
+      });""
     }, { threshold: 0.15 });
 
-});
+};
 // =========================================================
 // SCRIPT PRINCIPAL - ARQUITETURA MODULAR (CLEAN CODE)
 // =========================================================
