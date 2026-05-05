@@ -2,7 +2,10 @@
 
 header('Content-Type: application/json; charset=utf-8');
 
-require_once __DIR__ . '/../vendor/autoload.php';
+// 👇 A LINHA MÁGICA QUE FALTAVA ESTÁ AQUI 👇
+require_once __DIR__ . '/Core/Config.php';
+
+// A linha do autoload.php sumiu daqui!
 require_once __DIR__ . '/chat_helpers.php';
 
 $clinicProfile = require __DIR__ . '/clinic_profile.php';
@@ -167,6 +170,9 @@ function containsAny($haystack, $keywords)
 /**
  * Integração com OpenRouter usando Guzzle.
  */
+/**
+ * Integração com OpenRouter usando cURL nativo (Sem precisar do Guzzle).
+ */
 function getAiResponse(
     $userMessage,
     $companyName,
@@ -179,12 +185,6 @@ function getAiResponse(
         return 'Integração IA indisponível: configure OPENROUTER_CONFIG["api_key"] em backend/Core/Config.php.';
     }
 
-    $client = new GuzzleHttp\Client([
-        'base_uri' => 'https://openrouter.ai/api/v1/',
-        'timeout' => 20,
-        'verify' => false, // <-- ESSA É A MÁGICA PARA O XAMPP NO WINDOWS
-    ]);
-
     $clinicContext = buildClinicContext($clinicProfile);
     $systemPrompt = "Você é atendente virtual da empresa {$companyName}. "
         . "Responda em português do Brasil, com tom cordial e objetivo. "
@@ -194,34 +194,52 @@ function getAiResponse(
         . "Não invente preços, horários, endereço ou regras.\n\n"
         . "INFORMAÇÕES OFICIAIS DA CLÍNICA:\n{$clinicContext}";
 
-    try {
-        $response = $client->post('chat/completions', [
-            'headers' => [
-                'Authorization' => 'Bearer ' . $openRouter['api_key'],
-                'Content-Type' => 'application/json',
-                // Opcional, mas recomendado pela OpenRouter:
-                'HTTP-Referer' => 'http://localhost',
-                'X-Title' => $companyName . ' - Chatbot',
-            ],
-            'json' => [
-                'model' => $openRouter['model'],
-                'messages' => buildMessagesForAi($systemPrompt, $history, $userMessage),
-                'temperature' => 0.7,
-            ],
-        ]);
+    $messages = buildMessagesForAi($systemPrompt, $history, $userMessage);
 
-        $data = json_decode($response->getBody()->getContents(), true);
-        $content = $data['choices'][0]['message']['content'] ?? null;
+    // MÁGICA NATIVA DO PHP (Substitui o Guzzle)
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, "https://openrouter.ai/api/v1/chat/completions");
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // Evita o erro do XAMPP
 
-        if (!$content) {
-            return 'Não consegui gerar resposta agora. Tente novamente em instantes.';
-        }
+    $payload = [
+        "model" => $openRouter['model'],
+        "messages" => $messages,
+        "temperature" => 0.7
+    ];
 
-        return sanitizeAiText($content);
-    } catch (Throwable $e) {
-        // Isso vai jogar o erro técnico real na tela do chat!
-        return 'ERRO REAL: ' . $e->getMessage();
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        "Authorization: Bearer " . $openRouter['api_key'],
+        "Content-Type: application/json",
+        "HTTP-Referer: http://localhost",
+        "X-Title: " . $companyName . " Chatbot"
+    ]);
+
+    $result = curl_exec($ch);
+    $err = curl_error($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if ($err) {
+        return 'ERRO REAL DE CONEXÃO: ' . $err;
     }
+
+    $data = json_decode($result, true);
+
+    if ($httpCode !== 200) {
+        $msgErro = $data['error']['message'] ?? "Erro desconhecido.";
+        return "🚨 Erro na API (Código $httpCode): " . $msgErro;
+    }
+
+    $content = $data['choices'][0]['message']['content'] ?? null;
+
+    if (!$content) {
+        return 'Não consegui gerar resposta agora. Tente novamente em instantes.';
+    }
+
+    return sanitizeAiText($content);
 }
 
 /**
