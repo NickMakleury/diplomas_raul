@@ -1,0 +1,324 @@
+<?php
+
+header('Content-Type: application/json; charset=utf-8');
+
+require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/chat_helpers.php';
+
+$clinicProfile = require __DIR__ . '/clinic_profile.php';
+
+// 1. Recebe os dados enviados pelo JavaScript.
+$payload = json_decode(file_get_contents('php://input'), true) ?: [];
+
+$mode = $payload['mode'] ?? 'manual';
+$message = trim($payload['message'] ?? '');
+$conversationId = isset($payload['conversation_id']) ? (int) $payload['conversation_id'] : 0;
+
+$visitorName = trim($payload['visitor_name'] ?? '') ?: null;
+$visitorPhone = trim($payload['visitor_phone'] ?? '') ?: null;
+$visitorEmail = trim($payload['visitor_email'] ?? '') ?: null;
+
+if ($message === '') {
+    http_response_code(422);
+    echo json_encode(['error' => 'Mensagem vazia.']);
+    exit;
+}
+
+if ($conversationId <= 0) {
+    $conversationId = createConversation($visitorName, $visitorPhone, $visitorEmail, $mode === 'ai' ? 'ai' : 'manual');
+}
+
+// 2. Salva a mensagem do visitante.
+saveMessage($conversationId, 'user', $message);
+
+// 3. Decide se a resposta vem do menu manual ou da IA.
+if ($mode === 'ai') {
+    $history = getConversationHistoryForAi($conversationId, 12);
+    $responseText = getAiResponse($message, APP_NAME, OPENROUTER_CONFIG, $clinicProfile, $history);
+    $sender = 'ai';
+} else {
+    $responseText = getManualResponse($message);
+    $sender = 'bot';
+}
+
+// 4. Salva a resposta e devolve para o JavaScript.
+saveMessage($conversationId, $sender, $responseText);
+
+echo json_encode([
+    'conversation_id' => $conversationId,
+    'mode' => $mode,
+    'reply_sender' => $sender,
+    'reply' => $responseText,
+]);
+
+/**
+ * Regras do chatbot manual.
+ */
+function getManualResponse($message)
+{
+    $clinicProfile = require __DIR__ . '/clinic_profile.php';
+    $normalized = mb_strtolower(trim($message));
+
+    // Tenta buscar na tabela chatbot_options
+    $optionResponse = getManualOptionResponse($message);
+    if ($optionResponse !== null) {
+        return $optionResponse;
+    }
+
+    // Suporte a opções numéricas extras (manual didático)
+    if (in_array($normalized, ['5', 'menu', 'opções', 'opcoes'], true)) {
+        return buildManualMenu();
+    }
+
+    if (in_array($normalized, ['6', 'convenio', 'convênio', 'convenios', 'convênios'], true)) {
+        $convenios = implode(', ', $clinicProfile['convenios'] ?? []);
+        return "Convênios atendidos: {$convenios}.";
+    }
+
+    if (in_array($normalized, ['7', 'pagamento', 'pagamentos', 'formas de pagamento'], true)) {
+        $pagamentos = implode(', ', $clinicProfile['formas_pagamento'] ?? []);
+        return "Formas de pagamento: {$pagamentos}.";
+    }
+
+    if (in_array($normalized, ['8', 'preco', 'preços', 'precos', 'valor', 'valores'], true)) {
+        $faixa = $clinicProfile['faixa_valores'] ?? [];
+        return "Faixa de valores (estimativa):\n"
+            . "- Avaliação inicial: " . ($faixa['avaliacao_inicial'] ?? 'sob consulta') . "\n"
+            . "- Limpeza: " . ($faixa['limpeza'] ?? 'sob consulta') . "\n"
+            . "- Clareamento: " . ($faixa['clareamento'] ?? 'sob consulta') . "\n"
+            . "- Restauração: " . ($faixa['restauracao'] ?? 'sob consulta') . "\n"
+            . ($faixa['observacao'] ?? '');
+    }
+
+    if (in_array($normalized, ['9', 'urgencia', 'urgência', 'emergencia', 'emergência'], true)) {
+        $urgencia = $clinicProfile['politicas']['urgencia'] ?? 'Atendemos urgência conforme disponibilidade.';
+        $whatsapp = $clinicProfile['whatsapp'] ?? '';
+        return "{$urgencia}\nPara agilizar, chame no WhatsApp: {$whatsapp}.";
+    }
+
+    if (in_array($normalized, ['10', 'agendar', 'agendamento', 'consulta'], true)) {
+        $agendamento = $clinicProfile['agendamento'] ?? [];
+        return "Agendamento:\n"
+            . "- Canais: " . ($agendamento['canais'] ?? 'WhatsApp e telefone') . "\n"
+            . "- Dados necessários: " . ($agendamento['dados_necessarios'] ?? 'nome e telefone') . "\n"
+            . "- Confirmação: " . ($agendamento['tempo_medio_confirmacao'] ?? 'em horário comercial');
+    }
+
+    // Palavras-chave de localização e horário
+    if (containsAny($normalized, ['endereco', 'endereço', 'localizacao', 'localização', 'onde fica'])) {
+        return "Endereço: " . ($clinicProfile['endereco'] ?? 'Não informado.')
+            . "\nReferência: " . ($clinicProfile['ponto_referencia'] ?? 'Não informada.');
+    }
+
+    if (containsAny($normalized, ['horario', 'horário', 'funcionamento'])) {
+        $h = $clinicProfile['horario'] ?? [];
+        return "Horário de atendimento:\n"
+            . "- Segunda a sexta: " . ($h['segunda_a_sexta'] ?? '-') . "\n"
+            . "- Sábado: " . ($h['sabado'] ?? '-') . "\n"
+            . "- Domingo: " . ($h['domingo'] ?? '-') . "\n"
+            . "- Feriados: " . ($h['feriados'] ?? '-');
+    }
+
+    if (containsAny($normalized, ['servico', 'serviço', 'tratamento', 'tratamentos'])) {
+        $servicos = $clinicProfile['servicos'] ?? [];
+        return "Nossos serviços:\n- " . implode("\n- ", $servicos);
+    }
+
+    if (containsAny($normalized, ['telefone', 'contato', 'whatsapp', 'email', 'e-mail'])) {
+        return "Contatos da clínica:\n"
+            . "- Telefone: " . ($clinicProfile['telefone'] ?? '-') . "\n"
+            . "- WhatsApp: " . ($clinicProfile['whatsapp'] ?? '-') . "\n"
+            . "- E-mail: " . ($clinicProfile['email'] ?? '-');
+    }
+
+    return "Posso te ajudar com:\n" . buildManualMenu();
+}
+
+/**
+ * Menu de respostas do chatbot manual.
+ */
+function buildManualMenu()
+{
+    return "1 - Conhecer serviços\n"
+        . "2 - Horário de atendimento\n"
+        . "3 - Localização\n"
+        . "4 - Falar com atendente\n"
+        . "5 - Ver este menu novamente\n"
+        . "6 - Convênios\n"
+        . "7 - Formas de pagamento\n"
+        . "8 - Faixa de valores\n"
+        . "9 - Urgência odontológica\n"
+        . "10 - Como agendar consulta";
+}
+
+/**
+ * Verifica se um texto contém alguma palavra-chave.
+ */
+function containsAny($haystack, $keywords)
+{
+    foreach ($keywords as $word) {
+        if (str_contains($haystack, $word)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
+ * Integração com OpenRouter usando Guzzle.
+ */
+function getAiResponse(
+    $userMessage,
+    $companyName,
+    $openRouter,
+    $clinicProfile,
+    $history = []
+)
+{
+    if (empty($openRouter['api_key'])) {
+        return 'Integração IA indisponível: configure OPENROUTER_CONFIG["api_key"] em backend/Core/Config.php.';
+    }
+
+    $client = new GuzzleHttp\Client([
+        'base_uri' => 'https://openrouter.ai/api/v1/',
+        'timeout' => 20,
+        'verify' => false, // <-- ESSA É A MÁGICA PARA O XAMPP NO WINDOWS
+    ]);
+
+    $clinicContext = buildClinicContext($clinicProfile);
+    $systemPrompt = "Você é atendente virtual da empresa {$companyName}. "
+        . "Responda em português do Brasil, com tom cordial e objetivo. "
+        . "Responda sempre em texto simples, sem Markdown, sem negrito, sem itálico, sem listas com * ou -, sem hashtags e sem blocos de código. "
+        . "Use APENAS as informações oficiais abaixo quando a pergunta for sobre dados da clínica. "
+        . "Se a informação não estiver disponível, diga que vai encaminhar para atendente humano. "
+        . "Não invente preços, horários, endereço ou regras.\n\n"
+        . "INFORMAÇÕES OFICIAIS DA CLÍNICA:\n{$clinicContext}";
+
+    try {
+        $response = $client->post('chat/completions', [
+            'headers' => [
+                'Authorization' => 'Bearer ' . $openRouter['api_key'],
+                'Content-Type' => 'application/json',
+                // Opcional, mas recomendado pela OpenRouter:
+                'HTTP-Referer' => 'http://localhost',
+                'X-Title' => $companyName . ' - Chatbot',
+            ],
+            'json' => [
+                'model' => $openRouter['model'],
+                'messages' => buildMessagesForAi($systemPrompt, $history, $userMessage),
+                'temperature' => 0.7,
+            ],
+        ]);
+
+        $data = json_decode($response->getBody()->getContents(), true);
+        $content = $data['choices'][0]['message']['content'] ?? null;
+
+        if (!$content) {
+            return 'Não consegui gerar resposta agora. Tente novamente em instantes.';
+        }
+
+        return sanitizeAiText($content);
+    } catch (Throwable $e) {
+        // Isso vai jogar o erro técnico real na tela do chat!
+        return 'ERRO REAL: ' . $e->getMessage();
+    }
+}
+
+/**
+ * Converte os dados da clínica em texto para o prompt da IA.
+ */
+function buildClinicContext($profile)
+{
+    $lines = [];
+    $lines[] = 'Nome: ' . ($profile['nome'] ?? '');
+    $lines[] = 'Descrição: ' . ($profile['descricao'] ?? '');
+    $lines[] = 'Endereço: ' . ($profile['endereco'] ?? '');
+    $lines[] = 'Telefone: ' . ($profile['telefone'] ?? '');
+    $lines[] = 'WhatsApp: ' . ($profile['whatsapp'] ?? '');
+    $lines[] = 'E-mail: ' . ($profile['email'] ?? '');
+
+    if (!empty($profile['horario']) && is_array($profile['horario'])) {
+        $lines[] = 'Horários:';
+        foreach ($profile['horario'] as $dia => $hora) {
+            $lines[] = '- ' . $dia . ': ' . $hora;
+        }
+    }
+
+    if (!empty($profile['servicos']) && is_array($profile['servicos'])) {
+        $lines[] = 'Serviços: ' . implode(', ', $profile['servicos']);
+    }
+
+    if (!empty($profile['convenios']) && is_array($profile['convenios'])) {
+        $lines[] = 'Convênios: ' . implode(', ', $profile['convenios']);
+    }
+
+    if (!empty($profile['formas_pagamento']) && is_array($profile['formas_pagamento'])) {
+        $lines[] = 'Formas de pagamento: ' . implode(', ', $profile['formas_pagamento']);
+    }
+
+    if (!empty($profile['politicas']) && is_array($profile['politicas'])) {
+        $lines[] = 'Políticas:';
+        foreach ($profile['politicas'] as $chave => $texto) {
+            $lines[] = '- ' . $chave . ': ' . $texto;
+        }
+    }
+
+    if (!empty($profile['faq']) && is_array($profile['faq'])) {
+        $lines[] = 'FAQ:';
+        foreach ($profile['faq'] as $item) {
+            $pergunta = $item['pergunta'] ?? '';
+            $resposta = $item['resposta'] ?? '';
+            $lines[] = '- P: ' . $pergunta;
+            $lines[] = '  R: ' . $resposta;
+        }
+    }
+
+    return implode("\n", $lines);
+}
+
+/**
+ * Monta a lista de mensagens para a API da IA.
+ */
+function buildMessagesForAi($systemPrompt, $history, $currentMessage)
+{
+    $messages = [
+        ['role' => 'system', 'content' => $systemPrompt],
+    ];
+
+    foreach ($history as $msg) {
+        if (!isset($msg['role'], $msg['content'])) {
+            continue;
+        }
+        $messages[] = [
+            'role' => $msg['role'],
+            'content' => $msg['content'],
+        ];
+    }
+
+    $messages[] = ['role' => 'user', 'content' => $currentMessage];
+    return $messages;
+}
+
+/**
+ * Remove formatações comuns de Markdown para exibir texto puro
+ * no estilo esperado para interfaces simples (ex.: chat estilo WhatsApp).
+ */
+function sanitizeAiText($text)
+{
+    // Remove blocos de código
+    $text = preg_replace('/```[\s\S]*?```/u', '', $text) ?? $text;
+
+    // Remove marcações de negrito/itálico/code inline
+    $text = str_replace(['**', '__', '*', '_', '`'], '', $text);
+
+    // Remove título markdown no início de linha
+    $text = preg_replace('/^\s*#+\s*/mu', '', $text) ?? $text;
+
+    // Remove bullets markdown no início de linha
+    $text = preg_replace('/^\s*[-+]\s+/mu', '', $text) ?? $text;
+
+    // Normaliza espaços e quebras excessivas
+    $text = preg_replace("/\n{3,}/", "\n\n", $text) ?? $text;
+
+    return trim($text);
+}

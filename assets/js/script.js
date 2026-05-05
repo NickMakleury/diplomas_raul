@@ -81,113 +81,121 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // ---------------------------------------------------------
-  // 3. MÓDULO DO CHATBOT INTELIGENTE (Contexto e RegEx)
+  // 3. MÓDULO DO CHATBOT (INTEGRADO AO BACKEND DO PROFESSOR)
   // ---------------------------------------------------------
   const initChatbot = () => {
-    const DOM = {
-      toggleBtn: document.getElementById('chatbot-toggle'),
-      closeBtn: document.getElementById('chatbot-close'),
-      container: document.getElementById('chatbot-container'),
-      sendBtn: document.getElementById('chatbot-send'),
-      input: document.getElementById('chatbot-input'),
-      messages: document.getElementById('chatbot-messages')
-    };
+    let conversationId = Number(localStorage.getItem('conversation_id') || 0);
 
-    if (!DOM.container) return; 
-    let isTyping = false;
+    const chatBox = document.getElementById('chatbot-messages');
+    const chatForm = document.getElementById('chat-form');
+    const messageInput = document.getElementById('message');
+    const modeSelect = document.getElementById('mode');
+    const closeBtn = document.getElementById('chatbot-close');
+    const toggleBtn = document.getElementById('chatbot-toggle');
+    const container = document.getElementById('chatbot-container');
 
-    // Consciência de Tempo (Saudação Dinâmica)
-    const getGreeting = () => {
-      const hour = new Date().getHours();
-      if (hour >= 5 && hour < 12) return 'Bom dia';
-      if (hour >= 12 && hour < 18) return 'Boa tarde';
-      return 'Boa noite';
-    };
+    if (!container || !chatBox || !chatForm) return;
 
-    // Substitui a primeira mensagem do bot pelo cumprimento correto
-    const firstBotMessage = DOM.messages.querySelector('.message.bot');
-    if (firstBotMessage) {
-      firstBotMessage.textContent = `${getGreeting()}! Sou o assistente virtual do estúdio Diplomas Raúl. Como posso ajudar com seu ensaio hoje?`;
+    // Função para adicionar mensagem na tela (Adaptada para nosso CSS)
+    function addMessage(sender, text) {
+      const div = document.createElement('div');
+      div.className = `message ${sender === 'user' ? 'user' : 'bot'}`;
+      div.textContent = text;
+      chatBox.appendChild(div);
+      chatBox.scrollTop = chatBox.scrollHeight;
     }
 
-    // Base de conhecimento do Bot (Expressões Regulares)
-    const knowledgeBase = [
-      { keywords: /preço|valor|custa|orçamento|pagar/i, response: "Nossos pacotes variam de acordo com o estilo e tempo de ensaio. Para te passar um orçamento exato e justo, me chame no WhatsApp clicando no botão abaixo da seção Sobre!" },
-      { keywords: /agendar|marcar|data|horário|dia/i, response: "Excelente escolha! Para agendarmos a melhor data, por favor, me chame no WhatsApp. Lá nossa equipe verifica a agenda em tempo real." },
-      { keywords: /onde|local|estúdio|cidade|endereço/i, response: "Temos nosso estúdio climatizado próprio, mas também adoramos realizar ensaios externos (universidades, parques). Onde você gostaria de fotografar?" },
-      { keywords: /foto|portfolio|trabalho|ver/i, response: "Você pode conferir muito mais do nosso trabalho na seção 'Portfólio' rolando a página, ou visitar nosso perfil no Instagram!" }
-    ];
-
-    const defaultResponse = "Compreendo! Para te dar um atendimento mais personalizado e tirar todas as suas dúvidas, que tal conversarmos direto no WhatsApp?";
-
-    const scrollToBottom = () => DOM.messages.scrollTop = DOM.messages.scrollHeight;
-
-    const addMessage = (text, sender) => {
-      const msgDiv = document.createElement('div');
-      msgDiv.classList.add('message', sender);
-      msgDiv.textContent = text;
-      DOM.messages.appendChild(msgDiv);
-      scrollToBottom();
-    };
-
-    const addTypingIndicator = () => {
-      const indicator = document.createElement('div');
-      indicator.classList.add('message', 'bot', 'typing-indicator');
-      indicator.innerHTML = '<span></span><span></span><span></span>';
-      indicator.id = 'typing-indicator';
-      DOM.messages.appendChild(indicator);
-      scrollToBottom();
-    };
-
-    const removeTypingIndicator = () => {
-      const indicator = document.getElementById('typing-indicator');
-      if (indicator) indicator.remove();
-    };
-
-    const processUserMessage = (text) => {
-      const match = knowledgeBase.find(intent => intent.keywords.test(text));
-      return match ? match.response : defaultResponse;
-    };
-
-    const handleSend = () => {
-      const text = DOM.input.value.trim();
-      if (text === '' || isTyping) return;
-
-      addMessage(text, 'user');
-      DOM.input.value = '';
-      isTyping = true;
-
-      // Timeout encadeado para simular leitura e digitação humana
-      setTimeout(() => {
-        addTypingIndicator();
-        setTimeout(() => {
-          removeTypingIndicator();
-          addMessage(processUserMessage(text), 'bot');
-          isTyping = false;
-        }, 1500 + Math.random() * 1000); // Resposta entre 1.5s e 2.5s
-      }, 500);
-    };
-
-    // Eventos do Chat
-    const toggleChat = (forceClose = false) => {
-      if (forceClose) {
-        DOM.container.classList.add('hidden');
-      } else {
-        DOM.container.classList.toggle('hidden');
-        if (!DOM.container.classList.contains('hidden')) DOM.input.focus();
+    // Carrega histórico do Banco de Dados
+    async function loadHistory() {
+      if (!conversationId) return;
+      try {
+        const response = await fetch(`backend/get_messages.php?conversation_id=${conversationId}`);
+        const data = await response.json();
+        if(data.messages && data.messages.length > 0) {
+            chatBox.innerHTML = ''; // Limpa saudação se tiver histórico
+            data.messages.forEach((msg) => addMessage(msg.sender, msg.message));
+        }
+      } catch (error) {
+        console.error('Erro ao carregar histórico', error);
       }
-    };
+    }
 
-    DOM.toggleBtn.addEventListener('click', () => toggleChat());
-    DOM.closeBtn.addEventListener('click', () => toggleChat(true));
-    DOM.sendBtn.addEventListener('click', handleSend);
-    DOM.input.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') handleSend();
+    // Envio de formulário para o PHP
+    chatForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const message = messageInput.value.trim();
+      if (!message) return;
+
+      addMessage('user', message);
+      messageInput.value = '';
+
+      // Animação de digitação
+      const typingDiv = document.createElement('div');
+      typingDiv.className = 'message bot typing-indicator';
+      typingDiv.innerHTML = '<span></span><span></span><span></span>';
+      chatBox.appendChild(typingDiv);
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      const payload = {
+        message,
+        mode: modeSelect.value,
+        conversation_id: conversationId,
+        visitor_name: document.getElementById('visitor_name').value,
+        visitor_phone: document.getElementById('visitor_phone').value,
+        visitor_email: document.getElementById('visitor_email').value,
+      };
+
+      try {
+        const response = await fetch('backend/chatbot_response.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const data = await response.json();
+        
+        typingDiv.remove(); // Remove animação
+
+        if (data.error) {
+          addMessage('bot', data.error);
+          return;
+        }
+
+        conversationId = data.conversation_id;
+        localStorage.setItem('conversation_id', String(conversationId));
+        addMessage('bot', data.reply);
+      } catch (error) {
+        typingDiv.remove();
+        addMessage('bot', 'Erro de conexão com o servidor.');
+      }
     });
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && !DOM.container.classList.contains('hidden')) toggleChat(true);
+    // Botão de fechar conversa (No nosso layout, é o X do chat)
+    closeBtn.addEventListener('click', async () => {
+      container.classList.add('hidden'); // Esconde o chat visualmente
+      
+      if (!conversationId) return;
+      try {
+        await fetch('backend/close_conversation.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ conversation_id: conversationId }),
+        });
+        localStorage.removeItem('conversation_id');
+        conversationId = 0;
+        chatBox.innerHTML = '<div class="message bot">Sessão encerrada. Quando quiser, envie um "Oi" para recomeçar.</div>';
+      } catch (error) {}
     });
+
+    // Abrir/Fechar visual
+    toggleBtn.addEventListener('click', () => {
+      container.classList.toggle('hidden');
+      if (!container.classList.contains('hidden')) {
+        setTimeout(() => messageInput.focus(), 300);
+      }
+    });
+
+    // Inicia histórico
+    loadHistory();
   };
 
   // ---------------------------------------------------------

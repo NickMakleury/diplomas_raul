@@ -55,12 +55,23 @@
           Olá! Sou o assistente virtual do estúdio Diplomas Raúl. Como posso ajudar com seu ensaio hoje?
         </div>
       </div>
-      <div class="chatbot-input-area">
-        <input type="text" id="chatbot-input" placeholder="Digite sua mensagem...">
-        <button id="chatbot-send">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-        </button>
-      </div>
+      <form id="chat-form" class="chatbot-input-area" style="flex-wrap: wrap;">
+        <input type="hidden" id="visitor_name" value="Visitante">
+        <input type="hidden" id="visitor_phone" value="">
+        <input type="hidden" id="visitor_email" value="">
+        
+        <select id="mode" style="width: 100%; margin-bottom: 5px; background: #0a1128; color: #4a7ba5; border: 1px solid rgba(255,255,255,0.1); border-radius: 5px; padding: 5px;">
+          <option value="manual">Modo Manual (Menu)</option>
+          <option value="ai">Inteligência Artificial</option>
+        </select>
+
+        <div style="display: flex; width: 100%; gap: 10px;">
+          <input type="text" id="message" placeholder="Digite sua mensagem..." autocomplete="off" required>
+          <button type="submit" id="chatbot-send">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+          </button>
+        </div>
+      </form>
     </div>
 
     <footer class="footer" style="margin-top: 50px;">

@@ -904,6 +904,7 @@ body {
   border-radius: 12px;
   font-size: 14px;
   line-height: 1.4;
+  white-space: pre-wrap; /* <-- ESSA É A MÁGICA QUE FORMATA O TEXTO */
   animation: fadeIn 0.3s ease-out forwards;
 }
 
@@ -921,15 +922,41 @@ body {
   border-bottom-right-radius: 2px;
 }
 
+/* =========================================
+   ÁREA DE DIGITAÇÃO E BOTÃO ENVIAR
+   ========================================= */
+
 .chatbot-input-area {
   padding: 15px;
   background: #050914;
   display: flex;
+  flex-direction: column; /* Coloca o Select em cima e o Input embaixo */
   gap: 10px;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-#chatbot-input {
+/* Estilizando o menu de escolha (Manual / IA) */
+#mode {
+  width: 100%;
+  background: #0a1128 !important;
+  color: #4a7ba5 !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 8px !important;
+  padding: 8px 10px !important;
+  font-size: 13px;
+  outline: none;
+  cursor: pointer;
+}
+
+/* Container flexível para alinhar Input e Botão perfeitamente */
+.chatbot-input-area div {
+  display: flex;
+  width: 100%;
+  gap: 10px;
+}
+
+/* A caixa de texto (Agora com o ID correto: #message) */
+#message {
   flex: 1;
   background: #0a1128;
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -938,28 +965,32 @@ body {
   color: #fff;
   font-size: 14px;
   outline: none;
+  width: 100%;
 }
 
-#chatbot-input:focus {
+#message:focus {
   border-color: #e06d24;
 }
 
+/* O botão de enviar laranja */
 #chatbot-send {
   background: #e06d24;
   color: #fff;
   border: none;
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: 0.3s;
+  flex-shrink: 0; /* Garante que o botão não seja espremido e fique redondo */
 }
 
 #chatbot-send:hover {
   background: #ff8438;
+  transform: scale(1.05);
 }
 /* =========================================
    ESTILOS DINÂMICOS VINDOS DO JS AVANÇADO
