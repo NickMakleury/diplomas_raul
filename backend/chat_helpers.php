@@ -1,6 +1,14 @@
 <?php
 
-require_once __DIR__ . '/../vendor/autoload.php';
+// --- O NOSSO PORTEIRO AUTOMÁTICO (Substitui o autoload do Composer) ---
+spl_autoload_register(function ($class) {
+    // Transforma "Models\ChatConversation" em "Models/ChatConversation.php"
+    $caminho = __DIR__ . '/' . str_replace('\\', '/', $class) . '.php';
+    if (file_exists($caminho)) {
+        require_once $caminho;
+    }
+});
+// --------------------------------------------------------------------
 
 use Models\ChatConversation;
 use Models\ChatMessage;

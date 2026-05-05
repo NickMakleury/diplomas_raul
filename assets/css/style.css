@@ -1362,27 +1362,27 @@ body {
   .about-quote { margin: 20px 40px 40px !important; }
 }
 
-/* 3. CELULARES E TABLETS MENORES (Até 767px) */
-@media (max-width: 767px) {
-  .header { height: 70px !important; padding: 0 20px !important; }
-  .logo img { width: 50px !important; }
-  .logo-text { font-size: 22px !important; }
-  
-  .hero-content { padding-top: 120px !important; padding-left: 20px !important; padding-right: 20px !important; }
-  .hero-bg-text { top: 80px !important; font-size: clamp(3rem, 10vw, 5rem) !important; }
-  
-  .hero-buttons { flex-direction: column !important; gap: 12px !important; }
-  .btn-primary, .btn-outline { width: 100% !important; justify-content: center !important; }
-  
-  .hero-center img { max-height: 400px !important; }
+  /* 3. CELULARES E TABLETS MENORES (Até 767px) */
+  @media (max-width: 767px) {
+    .header { height: 70px !important; padding: 0 20px !important; }
+    .logo img { width: 50px !important; }
+    .logo-text { font-size: 22px !important; }
+    
+    .hero-content { padding-top: 120px !important; padding-left: 20px !important; padding-right: 20px !important; }
+    .hero-bg-text { top: 80px !important; font-size: clamp(3rem, 10vw, 5rem) !important; }
+    
+    .hero-buttons { flex-direction: column !important; gap: 12px !important; }
+    .btn-primary, .btn-outline { width: 100% !important; justify-content: center !important; }
+    
+    .hero-center img { max-height: 400px !important; }
 
-  .services { grid-template-columns: 1fr !important; padding: 30px 20px !important; }
-  .portfolio { padding: 30px 20px !important; }
-  .portfolio-gallery { grid-template-columns: 1fr !important; }
-  
-  .cta-footer { grid-template-columns: 1fr !important; text-align: center !important; padding: 40px 20px !important; gap: 20px !important; }
-  .cta-footer p { border-right: none !important; padding-right: 0 !important; }
-  
-  .footer { grid-template-columns: 1fr !important; text-align: center !important; gap: 15px !important; }
-  .chatbot-container { width: 90% !important; right: 5% !important; left: 5% !important; }
-}
+    .services { grid-template-columns: 1fr !important; padding: 30px 20px !important; }
+    .portfolio { padding: 30px 20px !important; }
+    .portfolio-gallery { grid-template-columns: 1fr !important; }
+    
+    .cta-footer { grid-template-columns: 1fr !important; text-align: center !important; padding: 40px 20px !important; gap: 20px !important; }
+    .cta-footer p { border-right: none !important; padding-right: 0 !important; }
+    
+    .footer { grid-template-columns: 1fr !important; text-align: center !important; gap: 15px !important; }
+    .chatbot-container { width: 90% !important; right: 5% !important; left: 5% !important; }
+  }
