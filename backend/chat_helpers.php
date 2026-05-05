@@ -1,5 +1,6 @@
 <?php
 
+
 // --- O NOSSO PORTEIRO AUTOMÁTICO (Substitui o autoload do Composer) ---
 spl_autoload_register(function ($class) {
     // Transforma "Models\ChatConversation" em "Models/ChatConversation.php"
