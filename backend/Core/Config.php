@@ -11,7 +11,7 @@ const DB_CONFIG = [
 ];
 
 const OPENROUTER_CONFIG = [
-    'api_key' => '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',
+    'api_key' => 'COLOQUE_SUA_CHAVE_AQUI', 
     'model' => 'openai/gpt-oss-120b:free',
 ];
 
