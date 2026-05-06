@@ -82,37 +82,52 @@ document.addEventListener("DOMContentLoaded", () => {
   
       const chatBox = document.getElementById('chatbot-messages');
       const chatForm = document.getElementById('chat-form');
-      // Busca o input pelo ID correto (evita o erro do null)
       const messageInput = document.getElementById('message') || document.getElementById('chatbot-input'); 
       const closeBtn = document.getElementById('chatbot-close');
       const toggleBtn = document.getElementById('chatbot-toggle');
       const container = document.getElementById('chatbot-container');
-      // Cria o áudio do bot (Som de notificação suave)
       const botSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2354/2354-preview.mp3');
 
-      const restartBtn = document.getElementById('chatbot-restart');
+      // Elementos do novo Menu de 3 pontinhos
+      const menuBtn = document.getElementById('chatbot-menu-btn');
+      const dropdown = document.getElementById('chatbot-dropdown');
+      const restartMenuBtn = document.getElementById('chatbot-restart-menu');
       const confirmModal = document.getElementById('custom-confirm');
       const confirmYes = document.getElementById('confirm-yes');
       const confirmCancel = document.getElementById('confirm-cancel');
 
-      if (restartBtn && confirmModal) {
-        // 1. Abre o modal ao clicar na rodinha
-        restartBtn.addEventListener('click', () => {
-          confirmModal.classList.remove('hidden');
+      // 1. Abre e fecha o menu de 3 pontinhos
+      if (menuBtn && dropdown) {
+        menuBtn.addEventListener('click', (e) => {
+          e.stopPropagation(); // Evita que clique feche imediatamente
+          dropdown.classList.toggle('hidden');
         });
 
-        // 2. Botão de Cancelar
+        // Fecha o menu se o usuário clicar em qualquer outro lugar da tela
+        document.addEventListener('click', (e) => {
+          if (!dropdown.contains(e.target) && e.target !== menuBtn) {
+            dropdown.classList.add('hidden');
+          }
+        });
+      }
+
+      if (restartMenuBtn && confirmModal) {
+        // 2. Abre a confirmação quando clica em Reiniciar no Menu
+        restartMenuBtn.addEventListener('click', () => {
+          dropdown.classList.add('hidden'); // Fecha o menuzinho
+          confirmModal.classList.remove('hidden'); // Abre a confirmação
+        });
+
         confirmCancel.addEventListener('click', () => {
           confirmModal.classList.add('hidden');
         });
 
-        // 3. Botão de Confirmar (Lógica original)
         confirmYes.addEventListener('click', () => {
           localStorage.removeItem('conversation_id');
           conversationId = 0;
           chatBox.innerHTML = '';
           addMessage('bot', 'Histórico limpo! 👋 Como posso ajudar a eternizar o seu momento hoje?');
-          confirmModal.classList.add('hidden'); // Fecha o modal
+          confirmModal.classList.add('hidden');
         });
       }
   

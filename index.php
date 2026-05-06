@@ -177,40 +177,40 @@
             <span>Online</span>
           </div>
         </div>
-        <div style="display: flex; align-items: center; gap: 15px;">
-          <button id="chatbot-restart" title="Reiniciar Conversa" style="background: none; border: none; color: #94a3b8; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center; transition: color 0.2s; outline: none;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events: none;">
-            <polyline points="23 4 23 10 17 10"></polyline>
-            <polyline points="1 20 1 14 7 14"></polyline>
-            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
-          </svg>
-        </button>
-          <button id="chatbot-close">✕</button>
+        
+        <div class="chatbot-header-actions">
+          <button id="chatbot-menu-btn" class="chat-action-btn">⋮</button>
+          <button id="chatbot-close" class="chat-action-btn">✕</button>
+          
+          <div id="chatbot-dropdown" class="chatbot-dropdown hidden">
+            <button id="chatbot-restart-menu">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+              Reiniciar Chat
+            </button>
+            <div class="dropdown-divider"></div>
+            <label class="dropdown-label">Atendimento:</label>
+            <select id="mode" class="dropdown-select">
+              <option value="ai" selected>Assistente IA</option>
+              <option value="manual">Menu Manual</option>
+            </select>
+          </div>
         </div>
       </div>
       
       <div id="chatbot-messages" class="chatbot-messages">
-        <div class="message bot">
-          Olá! Sou o assistente virtual do estúdio Diplomas Raúl. Como posso ajudar com seu ensaio hoje?
+        <div class="message bot">Olá! Sou o assistente virtual do estúdio Diplomas Raúl. Como posso ajudar com seu ensaio hoje?
         </div>
       </div>
       
-      <form id="chat-form" class="chatbot-input-area" style="flex-wrap: wrap;">
+      <form id="chat-form" class="chatbot-input-area">
         <input type="hidden" id="visitor_name" value="Visitante">
         <input type="hidden" id="visitor_phone" value="">
         <input type="hidden" id="visitor_email" value="">
         
-        <select id="mode" style="width: 100%; margin-bottom: 5px; background: #0a1128; color: #4a7ba5; border: 1px solid rgba(255,255,255,0.1); border-radius: 5px; padding: 5px;">
-          <option value="manual">Modo Manual (Menu)</option>
-          <option value="ai">Inteligência Artificial</option>
-        </select>
-
-        <div style="display: flex; width: 100%; gap: 10px;">
-          <input type="text" id="message" placeholder="Digite sua mensagem..." autocomplete="off" required>
-          <button type="submit" id="chatbot-send">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-          </button>
-        </div>
+        <input type="text" id="message" placeholder="Digite sua mensagem..." autocomplete="off" required>
+        <button type="submit" id="chatbot-send">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+        </button>
       </form>
     </div>
 

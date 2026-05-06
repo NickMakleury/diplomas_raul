@@ -908,13 +908,16 @@ body {
 }
 
 .message {
-  max-width: 80%;
-  padding: 12px 16px;
-  border-radius: 12px;
-  font-size: 14px;
-  line-height: 1.4;
-  white-space: pre-wrap; /* <-- ESSA É A MÁGICA QUE FORMATA O TEXTO */
-  animation: fadeIn 0.3s ease-out forwards;
+    max-width: 80%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    line-height: 1.5; /* Aumentei um pouquinho o respiro entre as linhas */
+    text-align: left; /* Força o texto a ficar retinho na esquerda */
+    white-space: pre-wrap; /* Mantém as quebras de linha da IA */
+    word-wrap: break-word; /* Evita que palavras muito longas quebrem a bolha */
+    animation: fadeIn 0.3s ease-out forwards;
+    font-family: 'Inter', Arial, sans-serif; /* Fonte mais limpa para leitura */
 }
 
 .message.bot {
@@ -965,70 +968,171 @@ body {
 }
 
 /* =========================================
-   ÁREA DE DIGITAÇÃO E BOTÃO ENVIAR
+   MENU DE 3 PONTINHOS DO CHATBOT (PREMIUM)
    ========================================= */
+.chatbot-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    position: relative;
+}
 
+.chat-action-btn {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: 0.3s;
+    padding: 5px 10px;
+}
+
+.chat-action-btn:hover {
+    opacity: 1;
+    color: #e06d24;
+}
+
+/* O Dropdown Moderno - Mais elegante, sem borda laranja forte */
+.chatbot-dropdown {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background: #081a33; /* Fundo mais sofisticado */
+    border: 1px solid rgba(255, 255, 255, 0.08); /* Borda super sutil */
+    border-radius: 8px;
+    padding: 12px;
+    width: 200px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 100;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    transform-origin: top right;
+    font-family: 'Inter', Arial, sans-serif;
+}
+
+.chatbot-dropdown.hidden {
+    opacity: 0;
+    transform: scale(0.95);
+    pointer-events: none;
+}
+
+/* O Botão de Reiniciar com espaço pro ícone SVG */
+#chatbot-restart-menu {
+    background: transparent;
+    border: none;
+    color: #e2e8f0;
+    text-align: left;
+    padding: 8px 10px;
+    font-size: 13px;
+    font-weight: 400;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Espaço para o ícone alinhar perfeitamente */
+}
+
+#chatbot-restart-menu:hover {
+    background: rgba(255, 255, 255, 0.06); /* Fundo sutil ao passar o mouse */
+    color: #fff;
+}
+
+.dropdown-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.06);
+    margin: 2px 0;
+}
+
+.dropdown-label {
+    font-size: 10px;
+    color: #64748b; /* Cinza mais escuro */
+    padding: 0 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+/* Select Customizado (Sem a seta feia padrão do navegador) */
+.dropdown-select {
+    /* A mágica do ícone SVG fininho direto no CSS */
+    background: #050914 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 12px center;
+    color: #e2e8f0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 10px 30px 10px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    outline: none;
+    cursor: pointer;
+    margin: 0;
+    transition: all 0.3s;
+    /* Remove a aparência genérica do Windows/Celular: */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none; 
+}
+
+.dropdown-select:focus {
+    border-color: #e06d24; /* Laranja apenas quando clica/foca */
+    background-color: #0a1128;
+}
+
+.dropdown-select option {
+    background: #0a1128;
+    color: #fff;
+}
+/* =========================================
+   ÁREA DE DIGITAÇÃO CORRIGIDA (Lado a Lado)
+   ========================================= */
 .chatbot-input-area {
-  padding: 15px;
-  background: #050914;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-#mode {
-  width: 100%;
-  background: #0a1128 !important;
-  color: #4a7ba5 !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
-  border-radius: 8px !important;
-  padding: 8px 10px !important;
-  font-size: 13px;
-  outline: none;
-  cursor: pointer;
-}
-
-.chatbot-input-area div {
-  display: flex;
-  width: 100%;
-  gap: 10px;
+    padding: 15px;
+    background: #050914;
+    display: flex;
+    flex-direction: row !important; /* Força ficar um do lado do outro */
+    align-items: center; /* Centraliza a altura do input com o botão */
+    gap: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 #message {
-  flex: 1;
-  background: #0a1128;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 20px;
-  padding: 10px 15px;
-  color: #fff;
-  font-size: 14px;
-  outline: none;
-  width: 100%;
+    flex: 1; /* Faz a caixa de texto crescer e empurrar o botão */
+    background: #0a1128;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 12px 18px;
+    color: #fff;
+    font-size: 14px;
+    outline: none;
+    width: 100%;
+    transition: border 0.3s;
 }
 
 #message:focus {
-  border-color: #e06d24;
+    border-color: #e06d24;
 }
 
 #chatbot-send {
-  background: #e06d24;
-  color: #fff;
-  border: none;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: 0.3s;
-  flex-shrink: 0;
+    background: #e06d24;
+    color: #fff;
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.3s;
+    flex-shrink: 0; /* Impede o botão de ser esmagado pelo input */
 }
 
 #chatbot-send:hover {
-  background: #ff8438;
-  transform: scale(1.05);
+    background: #ff8438;
+    transform: scale(1.05);
 }
 
 /* =========================================
