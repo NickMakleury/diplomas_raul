@@ -87,6 +87,34 @@ document.addEventListener("DOMContentLoaded", () => {
       const closeBtn = document.getElementById('chatbot-close');
       const toggleBtn = document.getElementById('chatbot-toggle');
       const container = document.getElementById('chatbot-container');
+      // Cria o áudio do bot (Som de notificação suave)
+      const botSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2354/2354-preview.mp3');
+
+      const restartBtn = document.getElementById('chatbot-restart');
+      const confirmModal = document.getElementById('custom-confirm');
+      const confirmYes = document.getElementById('confirm-yes');
+      const confirmCancel = document.getElementById('confirm-cancel');
+
+      if (restartBtn && confirmModal) {
+        // 1. Abre o modal ao clicar na rodinha
+        restartBtn.addEventListener('click', () => {
+          confirmModal.classList.remove('hidden');
+        });
+
+        // 2. Botão de Cancelar
+        confirmCancel.addEventListener('click', () => {
+          confirmModal.classList.add('hidden');
+        });
+
+        // 3. Botão de Confirmar (Lógica original)
+        confirmYes.addEventListener('click', () => {
+          localStorage.removeItem('conversation_id');
+          conversationId = 0;
+          chatBox.innerHTML = '';
+          addMessage('bot', 'Histórico limpo! 👋 Como posso ajudar a eternizar o seu momento hoje?');
+          confirmModal.classList.add('hidden'); // Fecha o modal
+        });
+      }
   
       if (!container || !chatBox || !chatForm || !messageInput) return;
   
@@ -166,11 +194,13 @@ document.addEventListener("DOMContentLoaded", () => {
             addMessage('bot', data.error);
             return;
           }
-  
+          // Quando a resposta chegar com sucesso...
           conversationId = data.conversation_id;
           localStorage.setItem('conversation_id', String(conversationId));
           addMessage('bot', data.reply);
           
+          // Toca o som (com catch para evitar erros se o navegador bloquear o áudio)
+          botSound.play().catch(e => console.log("Áudio bloqueado temporariamente"));
         } catch (error) {
           // Se der erro de internet, apaga as bolinhas também
           document.getElementById(typingId)?.remove();
