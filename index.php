@@ -35,9 +35,9 @@
       <h1 class="hero-bg-text animate-fade-in">DIPLOMAS</h1>
       <section class="hero-content">
         <div class="hero-left animate-slide-up">
-          <h2>Registre a <br />conquista <br />que<span>marca <br />uma vida.</span></h2>
+          <h2>Registre a <br />conquista <br />que<span>marca <br />una vida.</span></h2>
           <div class="line"></div>
-          <p>Fotografia profissional para diplomas escolares, formaturas e momentos acadêmicos especiais. Imagens elegantes, naturais e de alta qualidade para eternizar cada conquista.</p>
+          <p>Fotografía profesional para diplomas escolares, graduaciones y momentos académicos especiales. Imágenes elegantes, naturales y de alta calidad para inmortalizar cada logro.</p>
           <div class="hero-buttons">
             <a href="#contato" class="btn-primary btn-agendar">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
