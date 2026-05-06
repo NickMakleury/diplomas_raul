@@ -12,7 +12,7 @@ const DB_CONFIG = [
 
 // backend/Core/Config.php
 const OPENROUTER_CONFIG = [
-    'api_key' => 'Limpei pra enviar',
+    'api_key' => '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',
     'model'   => 'openai/gpt-oss-120b:free', 
 ];
 

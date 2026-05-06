@@ -15,7 +15,7 @@ class ChatbotOption extends Model
     {
         $row = $this->findOne([
             'option_number' => $option,
-            'active' => 1,
+            'is_active' => 1, // <--- A MÁGICA FOI AQUI: Mudamos de 'active' para 'is_active'
         ], [
             'response',
         ]);

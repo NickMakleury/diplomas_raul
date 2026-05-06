@@ -208,8 +208,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
   
+      // -----------------------------------------------------
+      // BOTÃO DE FECHAR (X) - ESCONDE O CHAT E VOLTA A BOLINHA
+      // -----------------------------------------------------
       closeBtn.addEventListener('click', async () => {
         container.classList.add('hidden'); 
+        toggleBtn.style.display = ''; // <-- MÁGICA: A bolinha volta a aparecer!
         
         if (!conversationId) return;
         try {
@@ -224,11 +228,15 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch (error) {}
       });
   
+      // -----------------------------------------------------
+      // BOTÃO DA BOLINHA - ABRE O CHAT E ESCONDE A BOLINHA
+      // -----------------------------------------------------
       toggleBtn.addEventListener('click', () => {
-        container.classList.toggle('hidden');
-        if (!container.classList.contains('hidden')) {
-          setTimeout(() => messageInput.focus(), 300);
-        }
+        container.classList.remove('hidden'); // Garante que o chat abra
+        toggleBtn.style.display = 'none'; // <-- MÁGICA: A bolinha some!
+        
+        // Foca no campo de digitar após a animação
+        setTimeout(() => messageInput.focus(), 300);
       });
   
       loadHistory();
@@ -266,7 +274,7 @@ document.addEventListener("DOMContentLoaded", () => {
         btn.addEventListener('click', (e) => {
           e.preventDefault(); 
           if(chatContainer && chatContainer.classList.contains('hidden')) {
-            chatToggle.click();
+            chatToggle.click(); // Já vai acionar a nova lógica de esconder a bolinha
           }
           setTimeout(() => {
             if(chatInput) chatInput.focus();

@@ -61,54 +61,69 @@ function getManualResponse($message)
     $studioProfile = require __DIR__ . '/studio_profile.php';
     $normalized = mb_strtolower(trim($message));
 
-    $optionResponse = getManualOptionResponse($message);
+    // 1. Tenta buscar no banco de dados primeiro (caso você cadastre algo lá no futuro)
+    $optionResponse = getManualOptionResponse($normalized);
     if ($optionResponse !== null) {
         return $optionResponse;
     }
 
-    if (in_array($normalized, ['5', 'menu', 'opções', 'opcoes'], true)) {
+    // Opção 5 - Mostrar Menu
+    if (in_array($normalized, ['5', 'menu', 'opções', 'opcoes', 'oi', 'olá', 'ola'], true)) {
         return buildManualMenu();
     }
 
-    // Ajustado de Convênios para algo mais fotográfico ou removido se não existir
+    // Opção 1 - Serviços
+    if (in_array($normalized, ['1']) || containsAny($normalized, ['servico', 'serviço', 'fotos', 'trabalhos'])) {
+        $servicos = $studioProfile['servicos'] ?? [];
+        return "Nossos serviços de fotografia:\n- " . implode("\n- ", $servicos);
+    }
+
+    // Opção 2 - Horário (Ajustado para ler exatamente os dados do seu studio_profile)
+    if (in_array($normalized, ['2']) || containsAny($normalized, ['horario', 'horário', 'funcionamento'])) {
+        $h = $studioProfile['horario'] ?? [];
+        return "Horário de atendimento:\n"
+            . "- Segunda a quinta: " . ($h['segunda_a_quinta'] ?? '-') . "\n"
+            . "- Sexta: " . ($h['sexta'] ?? '-') . "\n"
+            . "- Sábado: " . ($h['sabado'] ?? '-') . "\n"
+            . "- Domingo: " . ($h['domingo'] ?? 'Fechado');
+    }
+
+    // Opção 3 - Endereço
+    if (in_array($normalized, ['3']) || containsAny($normalized, ['endereco', 'endereço', 'localizacao', 'localização', 'onde fica'])) {
+        return "Nosso estúdio fica em: " . ($studioProfile['endereco'] ?? 'Não informado.');
+    }
+
+    // Opção 4 - Falar com o Raúl
+    if (in_array($normalized, ['4', 'raul', 'falar', 'humano'])) {
+        $wpp = $studioProfile['whatsapp'] ?? '';
+        return "Para falar diretamente com o Raúl, chame neste WhatsApp: {$wpp}";
+    }
+
+    // Opção 6 - Escolas Parceiras
     if (in_array($normalized, ['6', 'parcerias', 'escolas', 'faculdades'], true)) {
         $parceiros = implode(', ', $studioProfile['parcerias'] ?? ['Nenhuma informada']);
         return "Trabalhamos em parceria com: {$parceiros}.";
     }
 
+    // Opção 7 - Formas de pagamento
     if (in_array($normalized, ['7', 'pagamento', 'pagamentos', 'formas de pagamento'], true)) {
-        $pagamentos = implode(', ', $studioProfile['formas_pagamento'] ?? []);
+        $pagamentos = implode(', ', $studioProfile['formas_pagamento'] ?? ['Consulte no atendimento']);
         return "Formas de pagamento aceitas: {$pagamentos}.";
     }
 
+    // Opção 8 - Valores
     if (in_array($normalized, ['8', 'preco', 'preços', 'precos', 'valor', 'valores'], true)) {
         $faixa = $studioProfile['faixa_valores'] ?? [];
-        return "Investimento médio:\n"
-            . "- Foto para diploma: " . ($faixa['foto_diploma'] ?? 'sob consulta') . "\n"
-            . "- Ensaio estúdio: " . ($faixa['ensaio_estudio'] ?? 'sob consulta') . "\n"
-            . "- Cobertura formatura: " . ($faixa['formatura'] ?? 'sob consulta') . "\n"
-            . ($faixa['observacao'] ?? '');
+        return "Sobre nossos valores:\n" . ($faixa['orcamentos'] ?? 'Consulte diretamente com o Raúl.');
     }
 
-    if (containsAny($normalized, ['endereco', 'endereço', 'localizacao', 'localização', 'onde fica'])) {
-        return "Nosso estúdio fica em: " . ($studioProfile['endereco'] ?? 'Não informado.')
-            . "\nReferência: " . ($studioProfile['ponto_referencia'] ?? 'Próximo ao centro.');
+    // Opção 10 - Agendar
+    if (in_array($normalized, ['10', 'agendar', 'marcar'])) {
+        return "Para agendar, basta escolher o serviço desejado e nos informar a data, ou chamar no WhatsApp!";
     }
 
-    if (containsAny($normalized, ['horario', 'horário', 'funcionamento'])) {
-        $h = $studioProfile['horario'] ?? [];
-        return "Horário de atendimento:\n"
-            . "- Segunda a sexta: " . ($h['segunda_a_sexta'] ?? '-') . "\n"
-            . "- Sábado: " . ($h['sabado'] ?? '-') . "\n"
-            . "- Domingo: " . ($h['domingo'] ?? 'Fechado');
-    }
-
-    if (containsAny($normalized, ['servico', 'serviço', 'fotos', 'trabalhos'])) {
-        $servicos = $studioProfile['servicos'] ?? [];
-        return "Nossos serviços de fotografia:\n- " . implode("\n- ", $servicos);
-    }
-
-    return "Como posso ajudar? Escolha uma opção:\n" . buildManualMenu();
+    // Se a pessoa digitar qualquer outra coisa que não é um número válido, mostra o menu.
+    return "Como posso ajudar? Escolha uma opção digitando o NÚMERO correspondente:\n\n" . buildManualMenu();
 }
 
 function buildManualMenu()
@@ -143,7 +158,6 @@ function getAiResponse($userMessage, $companyName, $openRouter, $studioProfile, 
         return 'Integração IA indisponível: configure a chave no Config.php.';
     }
 
-    // Geramos o contexto baseado no perfil do estúdio
     $studioContext = buildStudioContext($studioProfile);
     
     $systemPrompt = "Você é o assistente virtual do Raúl, um fotógrafo profissional especializado em fotos para diplomas, formaturas e retratos corporativos. "
@@ -204,9 +218,6 @@ function getAiResponse($userMessage, $companyName, $openRouter, $studioProfile, 
     return $content ? sanitizeAiText($content) : 'Tente novamente em instantes.';
 }
 
-/**
- * Converte os dados do estúdio em texto para a IA.
- */
 function buildStudioContext($profile)
 {
     $lines = [];
@@ -242,10 +253,17 @@ function buildMessagesForAi($systemPrompt, $history, $currentMessage)
     return $messages;
 }
 
+// 👇 ESTA É A PARTE QUE FOI ATUALIZADA 👇
 function sanitizeAiText($text)
 {
     $text = preg_replace('/```[\s\S]*?```/u', '', $text);
     $text = str_replace(['**', '__', '*', '_', '`'], '', $text);
     $text = preg_replace("/\n{3,}/", "\n\n", $text);
+    
+    // O FILTRO ANTI-ALUCINAÇÃO QUE LIMPA JSON VAZADO:
+    $text = preg_replace('/"\}\s*$/u', '', trim($text));
+    $text = str_replace('"}', '', $text);
+    $text = preg_replace('/"$/u', '', trim($text));
+
     return trim($text);
 }
