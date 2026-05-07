@@ -138,6 +138,8 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch (error) {
           console.error('Erro ao carregar histórico', error);
         }
+      } catch (error) {
+        console.error("Erro ao carregar histórico", error);
       }
   
       chatForm.addEventListener('submit', async (event) => {
