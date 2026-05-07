@@ -2207,3 +2207,13 @@ img, video, iframe {
   
   .footer { grid-template-columns: 1fr !important; text-align: center !important; gap: 15px !important; }
 }
+
+.about-image {
+  width: 100%;          /* Ela tenta preencher a coluna... */
+  max-width: 400px;     /* ...mas para de crescer aqui (ajuste este valor como quiser) */
+  height: auto;         /* Mantém a proporção sem achatar ou esticar */
+  display: block;
+  margin: 0 auto;       /* Centraliza a foto na coluna dela */
+  margin-left: 0;       /* Garante que ela cole na esquerda */
+  margin-right: auto;   /* Empurra o espaço restante para a direita */
+}
