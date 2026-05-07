@@ -19,7 +19,7 @@
       <div class="logo-text">DIPLOMAS <span>RAÚL</span></div>
     </div>
     <nav class="menu">
-      <a href="#inicio">Inicio</a>
+      <a href="#inicio">Inicio </a>
       <a href="#servicos">Servicios</a>
       <a href="#portfolio">Portafolio</a>
       <a href="#sobre">Sobre</a>
