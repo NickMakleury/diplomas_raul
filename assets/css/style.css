@@ -212,7 +212,9 @@ body {
   transform: translateY(-2px);
 }
 
-/* HERO */
+/* =========================================
+   HERO (COMPUTADOR / DESKTOP)
+   ========================================= */
 .hero {
   min-height: 100vh;
   display: flex;
@@ -236,15 +238,8 @@ body {
   font-weight: 400;
   line-height: 0.8;
   letter-spacing: 17.5px !important;
-
   color: transparent;
-  background: linear-gradient(
-    180deg,
-    rgba(190, 229, 255, 0.558) 0%,
-    rgba(176, 220, 252, 0.392) 38%,
-    rgba(59, 72, 95, 0.812) 72%,
-    rgba(28, 38, 56, 0.438) 100%
-  );
+  background: linear-gradient(180deg, rgba(190, 229, 255, 0.558) 0%, rgba(176, 220, 252, 0.392) 38%, rgba(59, 72, 95, 0.812) 72%, rgba(28, 38, 56, 0.438) 100%);
   -webkit-background-clip: text;
   background-clip: text;
 
@@ -260,7 +255,7 @@ body {
   width: 100%;
   padding: 0 65px 25px;
   display: grid;
-  grid-template-columns: 1fr 1.35fr 0.85fr;
+  grid-template-columns: 1fr 1.35fr 0.85fr; /* Isso mantém o PC perfeito */
   align-items: end;
   gap: 30px;
 }
@@ -305,8 +300,7 @@ body {
   margin-top: 25px;
 }
 
-.btn-primary,
-.btn-outline {
+.btn-primary, .btn-outline {
   padding: 14px 22px;
   text-decoration: none;
   text-transform: uppercase;
@@ -342,7 +336,6 @@ body {
   transform: translateY(-3px);
 }
 
-/* FOTO CENTRAL */
 .hero-center {
   position: relative;
   z-index: 6;
@@ -362,7 +355,6 @@ body {
   top: 24.975px;
 }
 
-/* LADO DIREITO */
 .hero-right {
   padding-bottom: 80px;
   padding-left: 75px;
@@ -412,6 +404,113 @@ body {
   object-fit: cover;
   border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+}
+
+/* =========================================
+   HERO (RESPONSIVIDADE CELULAR - MODERN UI)
+   ========================================= */
+@media (max-width: 767px) {
+  .hero {
+      padding-top: 70px !important; 
+      min-height: auto !important; 
+      padding-bottom: 50px !important;
+  }
+
+  .hero-content { 
+      padding-top: 20px !important; 
+      padding-left: 20px !important; 
+      padding-right: 20px !important;
+      display: flex !important;
+      flex-direction: column !important; 
+      align-items: center !important;
+      gap: 30px !important;
+      min-height: auto !important;
+  }
+
+  .hero-bg-text { 
+      top: 60px !important; 
+      font-size: clamp(3.5rem, 15vw, 6rem) !important; 
+      letter-spacing: 5px !important;
+  }
+
+  /* FOTO EM CIMA (Círculo de fundo) */
+  .hero-center {
+      order: 1 !important; 
+      width: 100% !important;
+      position: relative;
+      padding: 20px 0 !important;
+      display: flex !important;
+      justify-content: center !important;
+  }
+
+  .hero-center::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -45%);
+      width: 280px; 
+      height: 280px;
+      background: radial-gradient(circle, rgba(224, 109, 36, 0.25) 0%, rgba(224, 109, 36, 0) 70%); 
+      border-radius: 50%;
+      z-index: -1;
+  }
+
+  .hero-center img { 
+      max-height: 380px !important; 
+      transform: scale(1) !important; 
+      top: 0 !important;
+  }
+
+  /* TEXTO EMBAIXO CENTRALIZADO */
+  .hero-left {
+      order: 2 !important; 
+      width: 100% !important;
+      text-align: center !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+  }
+
+  .hero-left h2 {
+      font-size: 2.4rem !important;
+      line-height: 1.2 !important;
+  }
+  
+  .hero-left h2 br {
+      display: none; 
+  }
+
+  .line {
+      margin: 15px auto !important; 
+  }
+
+  .hero-left p {
+      margin: 0 auto !important;
+      max-width: 90% !important;
+      font-size: 15px !important;
+  }
+
+  /* BOTÕES LADO A LADO */
+  .hero-buttons { 
+      width: 100% !important;
+      display: flex !important;
+      flex-direction: column !important; 
+      gap: 12px !important; 
+      margin-top: 25px !important;
+  }
+
+  .btn-primary, .btn-outline { 
+      width: 100% !important; 
+      justify-content: center !important; 
+      padding: 16px 20px !important; 
+      font-size: 14px !important;
+      border-radius: 8px !important;
+  }
+
+  .hero-right {
+      display: none !important;
+  }
 }
 
 /* SERVIÇOS */
@@ -964,13 +1063,16 @@ body {
 }
 
 .message {
-  max-width: 80%;
-  padding: 12px 16px;
-  border-radius: 12px;
-  font-size: 14px;
-  line-height: 1.4;
-  white-space: pre-wrap; /* <-- ESSA É A MÁGICA QUE FORMATA O TEXTO */
-  animation: fadeIn 0.3s ease-out forwards;
+    max-width: 80%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    line-height: 1.5; /* Aumentei um pouquinho o respiro entre as linhas */
+    text-align: left; /* Força o texto a ficar retinho na esquerda */
+    white-space: pre-wrap; /* Mantém as quebras de linha da IA */
+    word-wrap: break-word; /* Evita que palavras muito longas quebrem a bolha */
+    animation: fadeIn 0.3s ease-out forwards;
+    font-family: 'Inter', Arial, sans-serif; /* Fonte mais limpa para leitura */
 }
 
 .message.bot {
@@ -1021,70 +1123,171 @@ body {
 }
 
 /* =========================================
-   ÁREA DE DIGITAÇÃO E BOTÃO ENVIAR
+   MENU DE 3 PONTINHOS DO CHATBOT (PREMIUM)
    ========================================= */
+.chatbot-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    position: relative;
+}
 
+.chat-action-btn {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: 0.3s;
+    padding: 5px 10px;
+}
+
+.chat-action-btn:hover {
+    opacity: 1;
+    color: #e06d24;
+}
+
+/* O Dropdown Moderno - Mais elegante, sem borda laranja forte */
+.chatbot-dropdown {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background: #081a33; /* Fundo mais sofisticado */
+    border: 1px solid rgba(255, 255, 255, 0.08); /* Borda super sutil */
+    border-radius: 8px;
+    padding: 12px;
+    width: 200px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 100;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    transform-origin: top right;
+    font-family: 'Inter', Arial, sans-serif;
+}
+
+.chatbot-dropdown.hidden {
+    opacity: 0;
+    transform: scale(0.95);
+    pointer-events: none;
+}
+
+/* O Botão de Reiniciar com espaço pro ícone SVG */
+#chatbot-restart-menu {
+    background: transparent;
+    border: none;
+    color: #e2e8f0;
+    text-align: left;
+    padding: 8px 10px;
+    font-size: 13px;
+    font-weight: 400;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Espaço para o ícone alinhar perfeitamente */
+}
+
+#chatbot-restart-menu:hover {
+    background: rgba(255, 255, 255, 0.06); /* Fundo sutil ao passar o mouse */
+    color: #fff;
+}
+
+.dropdown-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.06);
+    margin: 2px 0;
+}
+
+.dropdown-label {
+    font-size: 10px;
+    color: #64748b; /* Cinza mais escuro */
+    padding: 0 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+/* Select Customizado (Sem a seta feia padrão do navegador) */
+.dropdown-select {
+    /* A mágica do ícone SVG fininho direto no CSS */
+    background: #050914 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 12px center;
+    color: #e2e8f0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 10px 30px 10px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    outline: none;
+    cursor: pointer;
+    margin: 0;
+    transition: all 0.3s;
+    /* Remove a aparência genérica do Windows/Celular: */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none; 
+}
+
+.dropdown-select:focus {
+    border-color: #e06d24; /* Laranja apenas quando clica/foca */
+    background-color: #0a1128;
+}
+
+.dropdown-select option {
+    background: #0a1128;
+    color: #fff;
+}
+/* =========================================
+   ÁREA DE DIGITAÇÃO CORRIGIDA (Lado a Lado)
+   ========================================= */
 .chatbot-input-area {
-  padding: 15px;
-  background: #050914;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-#mode {
-  width: 100%;
-  background: #0a1128 !important;
-  color: #4a7ba5 !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
-  border-radius: 8px !important;
-  padding: 8px 10px !important;
-  font-size: 13px;
-  outline: none;
-  cursor: pointer;
-}
-
-.chatbot-input-area div {
-  display: flex;
-  width: 100%;
-  gap: 10px;
+    padding: 15px;
+    background: #050914;
+    display: flex;
+    flex-direction: row !important; /* Força ficar um do lado do outro */
+    align-items: center; /* Centraliza a altura do input com o botão */
+    gap: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 #message {
-  flex: 1;
-  background: #0a1128;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 20px;
-  padding: 10px 15px;
-  color: #fff;
-  font-size: 14px;
-  outline: none;
-  width: 100%;
+    flex: 1; /* Faz a caixa de texto crescer e empurrar o botão */
+    background: #0a1128;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 12px 18px;
+    color: #fff;
+    font-size: 14px;
+    outline: none;
+    width: 100%;
+    transition: border 0.3s;
 }
 
 #message:focus {
-  border-color: #e06d24;
+    border-color: #e06d24;
 }
 
 #chatbot-send {
-  background: #e06d24;
-  color: #fff;
-  border: none;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: 0.3s;
-  flex-shrink: 0;
+    background: #e06d24;
+    color: #fff;
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.3s;
+    flex-shrink: 0; /* Impede o botão de ser esmagado pelo input */
 }
 
 #chatbot-send:hover {
-  background: #ff8438;
-  transform: scale(1.05);
+    background: #ff8438;
+    transform: scale(1.05);
 }
 
 /* =========================================
@@ -1601,6 +1804,58 @@ img, video, iframe {
   .chatbot-container { width: 90% !important; right: 5% !important; left: 5% !important; }
   
   .como-funciona > div > div { flex-direction: column !important; align-items: center !important; }
+  /* =========================================
+     ESTILO REFERÊNCIA: HERO NO CELULAR
+     ========================================= */
+  
+  /* Centraliza todo o bloco de texto */
+  .hero-left {
+      text-align: center !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      margin-bottom: 30px !important;
+  }
+
+  /* Garante que os botões fiquem alinhados e bonitos */
+  .hero-buttons { 
+      flex-direction: column !important; 
+      gap: 15px !important; 
+      width: 100% !important;
+      max-width: 300px !important; /* Não deixa o botão esticar de ponta a ponta na tela */
+      margin: 25px auto 0 !important;
+  }
+
+  /* A MÁGICA: O círculo colorido atrás da foto */
+  .hero-center {
+      position: relative;
+      z-index: 6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100% !important;
+      padding: 40px 0 !important; /* Espaço pro círculo respirar */
+  }
+
+  .hero-center::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 260px; /* Tamanho do círculo no celular */
+      height: 260px;
+      background-color: #e06d24; /* Aqui usamos o Laranja do Raúl. Se quiser roxo, troque para #9b51e0 */
+      border-radius: 50%;
+      z-index: -1; /* Fica atrás da foto */
+      box-shadow: 0 0 40px rgba(224, 109, 36, 0.4); /* Brilhozinho no fundo */
+  }
+
+  .hero-center img {
+      max-height: 380px !important;
+      position: relative;
+      z-index: 2;
+  }
 }
 
 /* =========================================

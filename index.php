@@ -210,15 +210,23 @@
           <strong>Asistente Raúl</strong>
           <span>En línea</span>
         </div>
-        <div style="display: flex; align-items: center; gap: 15px;">
-          <button id="chatbot-restart" title="Reiniciar Conversa" style="background: none; border: none; color: #94a3b8; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center; transition: color 0.2s; outline: none;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events: none;">
-            <polyline points="23 4 23 10 17 10"></polyline>
-            <polyline points="1 20 1 14 7 14"></polyline>
-            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
-          </svg>
-        </button>
-          <button id="chatbot-close">✕</button>
+        
+        <div class="chatbot-header-actions">
+          <button id="chatbot-menu-btn" class="chat-action-btn">⋮</button>
+          <button id="chatbot-close" class="chat-action-btn">✕</button>
+          
+          <div id="chatbot-dropdown" class="chatbot-dropdown hidden">
+            <button id="chatbot-restart-menu">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+              Reiniciar Chat
+            </button>
+            <div class="dropdown-divider"></div>
+            <label class="dropdown-label">Atendimento:</label>
+            <select id="mode" class="dropdown-select">
+              <option value="ai" selected>Assistente IA</option>
+              <option value="manual">Menu Manual</option>
+            </select>
+          </div>
         </div>
       </div>
       <button id="chatbot-close">✕</button>
