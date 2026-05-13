@@ -2010,3 +2010,210 @@ img, video, iframe {
     
     .confirm-card { max-width: 85% !important; }
 }
+/* =========================================
+   RESPONSIVIDADE BLINDADA E UNIFICADA
+   ========================================= */
+
+/* 1. Trava Global: Mata o bug da barra branca (Overflow X) */
+html, body {
+    overflow-x: hidden !important; 
+    width: 100vw !important;
+    position: relative;
+}
+
+img, video, iframe {
+    max-width: 100%;
+    height: auto;
+}
+
+/* 2. TABLETS GRANDES E MÉDIOS (Até 1100px) */
+@media (max-width: 1100px) {
+  .header { padding: 0 40px !important; }
+  
+  /* Menu Lateral Gaveta */
+  .menu {
+    position: fixed !important; 
+    top: 0 !important; 
+    right: -100% !important; 
+    width: 300px !important; 
+    height: 100vh !important;
+    background: rgba(5, 9, 20, 0.98) !important;
+    backdrop-filter: blur(10px) !important;
+    flex-direction: column !important; 
+    justify-content: center !important; 
+    align-items: center !important;
+    transition: right 0.4s ease-in-out !important;
+    z-index: 99999 !important;
+    box-shadow: -10px 0 30px rgba(0,0,0,0.6) !important;
+    gap: 30px !important;
+  }
+  
+  .menu.active { right: 0 !important; }
+  .menu a { font-size: 20px !important; letter-spacing: 2px !important; }
+  
+  .hamburger { display: block !important; }
+  .header .btn-header { display: none !important; } 
+
+  .hero-content {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    padding: 160px 40px 0 !important; 
+    gap: 40px !important;
+  }
+
+  .hero-right { display: none !important; }
+
+  .hero-bg-text {
+    top: 120px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important; 
+    width: 100vw !important;
+    font-size: clamp(4rem, 12vw, 8rem) !important;
+  }
+
+  .hero-left {
+    text-align: center !important;
+    width: 100% !important;
+    max-width: 800px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+
+  .line { margin: 20px auto !important; } 
+  .hero-buttons { justify-content: center !important; width: 100% !important; }
+  
+  .hero-center { width: 100% !important; display: flex !important; justify-content: center !important; }
+  .hero-center img { max-height: 550px !important; }
+
+  .services { grid-template-columns: repeat(2, 1fr) !important; padding: 50px 40px !important; gap: 30px !important; }
+  .service-item { border-right: none !important; }
+  
+  .portfolio { grid-template-columns: 1fr !important; text-align: center !important; padding: 50px 40px !important; }
+  .portfolio-gallery { grid-template-columns: repeat(2, 1fr) !important; }
+  
+  .about { 
+    grid-template-columns: 1fr !important; 
+    text-align: center !important; 
+    display: flex !important; 
+    flex-direction: column !important; 
+    align-items: center !important; 
+    gap: 40px !important;
+  }
+  .about-text { padding: 40px !important; width: 100% !important;}
+  .about-quote { margin: 20px 40px 40px !important; width: 100% !important;}
+}
+
+/* 3. CELULARES E TABLETS MENORES (Até 767px) */
+@media (max-width: 767px) {
+  .header { height: 70px !important; padding: 0 20px !important; }
+  .logo img { width: 50px !important; }
+  .logo-text { font-size: 22px !important; }
+  
+  /* --- HERO MODERN UI NO CELULAR --- */
+  .hero {
+      padding-top: 70px !important; 
+      min-height: auto !important; 
+      padding-bottom: 50px !important;
+  }
+
+  .hero-content { 
+      padding-top: 20px !important; 
+      padding-left: 20px !important; 
+      padding-right: 20px !important;
+      gap: 30px !important;
+  }
+
+  .hero-bg-text { 
+      top: 60px !important; 
+      font-size: clamp(3rem, 10vw, 5rem) !important; 
+  }
+
+  /* Círculo luminoso na foto */
+  .hero-center {
+      order: 1 !important; 
+      padding: 20px 0 !important;
+  }
+
+  .hero-center::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -45%);
+      width: 280px; 
+      height: 280px;
+      background: radial-gradient(circle, rgba(224, 109, 36, 0.25) 0%, rgba(224, 109, 36, 0) 70%); 
+      border-radius: 50%;
+      z-index: -1;
+  }
+
+  .hero-center img { 
+      max-height: 380px !important; 
+      transform: scale(1) !important; 
+      top: 0 !important;
+  }
+
+  /* Texto e Botões centralizados */
+  .hero-left {
+      order: 2 !important; 
+  }
+
+  .hero-left h2 { font-size: 2.4rem !important; }
+  .hero-left h2 br { display: none; }
+  .hero-left p { max-width: 90% !important; font-size: 15px !important; }
+
+  .hero-buttons { 
+      flex-direction: column !important; 
+      gap: 12px !important; 
+      margin-top: 25px !important;
+  }
+
+  .btn-primary, .btn-outline { 
+      width: 100% !important; 
+      justify-content: center !important; 
+      padding: 16px 20px !important; 
+      border-radius: 8px !important;
+  }
+  /* --------------------------------- */
+
+  .services { grid-template-columns: 1fr !important; padding: 30px 20px !important; }
+  .portfolio { padding: 30px 20px !important; }
+  
+  /* Portfólio Quadrado Perfeito */
+  .portfolio-gallery { 
+      display: grid !important;
+      grid-template-columns: repeat(2, 1fr) !important; 
+      gap: 15px !important; 
+  }
+  
+  .portfolio-card {
+      width: 100% !important;
+      height: auto !important; 
+      aspect-ratio: 1 / 1 !important; 
+      border-radius: 0 !important;
+  }
+  
+  .portfolio-card img {
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover !important; 
+      border-radius: 0 !important; 
+  }
+  
+  .cta-footer { grid-template-columns: 1fr !important; text-align: center !important; padding: 40px 20px !important; gap: 20px !important; }
+  .cta-footer p { border-right: none !important; padding-right: 0 !important; }
+  
+  .footer { grid-template-columns: 1fr !important; text-align: center !important; gap: 15px !important; }
+}
+
+.about-image {
+  width: 100%;          /* Ela tenta preencher a coluna... */
+  max-width: 400px;     /* ...mas para de crescer aqui (ajuste este valor como quiser) */
+  height: auto;         /* Mantém a proporção sem achatar ou esticar */
+  display: block;
+  margin: 0 auto;       /* Centraliza a foto na coluna dela */
+  margin-left: 0;       /* Garante que ela cole na esquerda */
+  margin-right: auto;   /* Empurra o espaço restante para a direita */
+}

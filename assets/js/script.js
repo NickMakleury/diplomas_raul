@@ -313,14 +313,6 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         });
       }
-  
-      const btnMaisFotos = document.querySelector('.portfolio-btn');
-      if(btnMaisFotos) {
-        btnMaisFotos.addEventListener('click', (e) => {
-          e.preventDefault();
-          showToast("A galeria completa está sendo preparada. Volte em breve!");
-        });
-      }
     };
   
     // ---------------------------------------------------------
