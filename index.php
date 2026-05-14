@@ -22,10 +22,10 @@
       <a href="#servicos">Servicios</a>
       <a href="#portfolio">Portafolio</a>
       <a href="#sobre">Sobre Nosotros</a>
-      <a href="#agendar">Agendar</a>
+      <a href="agendar.php">Agendar</a>
       <a href="#contato">Contacto</a>
     </nav>
-    <a href="#contato" class="btn-header btn-agendar">
+    <a href="agendar.php" class="btn-header btn-agendar">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
         <line x1="16" y1="2" x2="16" y2="6"></line>
@@ -47,7 +47,7 @@
         <div class="line"></div>
         <p>Fotografía profesional para diplomas escolares, graduaciones y momentos académicos especiales. Imágenes elegantes, naturales y de alta calidad para inmortalizar cada logro.</p>
         <div class="hero-buttons">
-          <a href="#contato" class="btn-primary btn-agendar">
+          <a href="agendar.php" class="btn-primary btn-agendar">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
               <line x1="16" y1="2" x2="16" y2="6"></line>
@@ -56,7 +56,7 @@
             </svg>
             Reservar Sesión
           </a>
-          <a href="#portfolio" class="btn-outline">
+          <a href="#" id="btn-open-portfolio" class="btn-outline">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
               <circle cx="8.5" cy="8.5" r="1.5"></circle>
@@ -176,140 +176,7 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════
-       SEÇÃO: FORMULÁRIO DE AGENDAMENTO PROFISSIONAL
-       ═══════════════════════════════════════════════════ -->
-  <section class="agendamento-section" id="agendar">
-    <div class="agendamento-inner">
 
-      <!-- Coluna esquerda: texto informativo -->
-      <div class="agendamento-info reveal">
-        <p class="agend-tag">Agendamento Online</p>
-        <h2>Reserve <br /><span>sua sessão</span></h2>
-        <div class="line"></div>
-        <p class="agend-desc">
-          Preencha o formulário e nossa equipe entrará em contato para confirmar
-          todos os detalhes da sua sessão fotográfica de formatura.
-        </p>
-
-        <div class="agend-beneficios">
-          <div class="agend-beneficio">
-            <div class="agend-beneficio-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            </div>
-            <span>Confirmação por e-mail imediata</span>
-          </div>
-          <div class="agend-beneficio">
-            <div class="agend-beneficio-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            </div>
-            <span>O Raúl entra em contato em até 24h</span>
-          </div>
-          <div class="agend-beneficio">
-            <div class="agend-beneficio-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            </div>
-            <span>Sem compromisso inicial</span>
-          </div>
-          <div class="agend-beneficio">
-            <div class="agend-beneficio-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            </div>
-            <span>100% gratuito para solicitar</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Coluna direita: formulário -->
-      <div class="agendamento-form-wrap reveal">
-        <div class="agend-form-card">
-          <div class="agend-form-header">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-              <line x1="16" y1="2" x2="16" y2="6"></line>
-              <line x1="8" y1="2" x2="8" y2="6"></line>
-              <line x1="3" y1="10" x2="21" y2="10"></line>
-            </svg>
-            <span>Formulário de Agendamento</span>
-          </div>
-
-          <form id="form-agendamento" class="agend-form" novalidate>
-            <div class="agend-form-grid">
-
-              <div class="agend-field">
-                <label for="ag-nome">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                  Nome completo <span class="agend-required">*</span>
-                </label>
-                <input type="text" id="ag-nome" name="nome" placeholder="Seu nome completo" required autocomplete="name">
-              </div>
-
-              <div class="agend-field">
-                <label for="ag-email">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                  E-mail <span class="agend-required">*</span>
-                </label>
-                <input type="email" id="ag-email" name="email" placeholder="seu@email.com" required autocomplete="email">
-              </div>
-
-              <div class="agend-field">
-                <label for="ag-telefone">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13 19.79 19.79 0 0 1 1.61 4.4 2 2 0 0 1 3.6 2.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.18 6.18l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-                  Telefone / WhatsApp
-                </label>
-                <input type="tel" id="ag-telefone" name="telefone" placeholder="(75) 9 0000-0000" autocomplete="tel">
-              </div>
-
-              <div class="agend-field">
-                <label for="ag-data">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                  Data da Formatura <span class="agend-required">*</span>
-                </label>
-                <input type="date" id="ag-data" name="data_formatura" required>
-              </div>
-
-              <div class="agend-field agend-field--full">
-                <label for="ag-curso">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
-                  Curso / Instituição <span class="agend-required">*</span>
-                </label>
-                <input type="text" id="ag-curso" name="curso" placeholder="Ex: Enfermagem — UEFS" required>
-              </div>
-
-              <div class="agend-field agend-field--full">
-                <label for="ag-mensagem">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-                  Mensagem adicional <span class="agend-opcional">(opcional)</span>
-                </label>
-                <textarea id="ag-mensagem" name="mensagem" rows="3" placeholder="Alguma preferência ou dúvida? Ex: prefiro fotos em ambiente externo..."></textarea>
-              </div>
-
-            </div><!-- /grid -->
-
-            <!-- Feedback de envio -->
-            <div id="agend-feedback" class="agend-feedback hidden" role="alert" aria-live="polite"></div>
-
-            <button type="submit" class="agend-submit" id="agend-btn-submit">
-              <span class="agend-btn-text">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                Solicitar Agendamento
-              </span>
-              <span class="agend-btn-loading hidden">
-                <svg class="agend-spinner" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10" stroke-opacity="0.25"/><path d="M12 2 a10 10 0 0 1 10 10" stroke-linecap="round"/></svg>
-                Enviando...
-              </span>
-            </button>
-
-            <p class="agend-privacy">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-              Seus dados estão seguros e nunca serão compartilhados.
-            </p>
-          </form>
-        </div>
-      </div>
-
-    </div>
-  </section>
 
   <section class="cta-footer" id="contato">
     <div class="cta-title reveal">
@@ -401,6 +268,37 @@
         <button id="confirm-cancel" class="btn-cancel">Cancelar</button>
         <button id="confirm-yes" class="btn-yes">Sí, reiniciar</button>
       </div>
+    </div>
+  </div>
+
+  <!-- Portfolio Full Modal -->
+  <div class="portfolio-modal-overlay" id="portfolio-modal">
+    <div class="portfolio-modal-box">
+      <button class="portfolio-modal-close" id="portfolio-modal-close">&times;</button>
+      <div class="portfolio-modal-header">
+        <h2>Nuestro Portafolio</h2>
+        <p>Explora más ejemplos de nuestro trabajo y descubre cómo eternizamos cada momento especial.</p>
+      </div>
+      <div class="portfolio-full-grid">
+        <?php
+        $images = [
+          'menina1.png', 'menina2.png', 'menina3.png', 'menina4.png', 'menina5.png', 'menina6.png',
+          'menino1.png', 'menino2.png', 'menino3.png', 'foto1.jpg', 'foto2.jpg', 'foto3.jpg'
+        ];
+        foreach ($images as $img): ?>
+          <div class="portfolio-item">
+            <img src="assets/imagem/<?= $img ?>" alt="Muestra de portafolio" loading="lazy" />
+          </div>
+        <?php endforeach; ?>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lightbox Modal (For full screen image view) -->
+  <div class="lightbox-modal" id="lightbox">
+    <div class="lightbox-content">
+      <button class="lightbox-close" id="lightbox-close">&times;</button>
+      <img src="" alt="Imagem ampliada" id="lightbox-img" />
     </div>
   </div>
 

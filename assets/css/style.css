@@ -17,6 +17,31 @@ body {
   min-height: 100vh;
 }
 
+/* ── SCROLLBAR CUSTOMIZADA ── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #07101f;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #e06d24;
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ff8c3a;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #e06d24 #07101f;
+}
+
 /* Empurra o footer sempre para o final da tela */
 .footer {
   margin-top: auto !important;
@@ -2633,4 +2658,160 @@ body {
   .agend-form {
     padding: 24px 20px 18px;
   }
+}
+
+/* =========================================
+   PORTFOLIO MODAL & LIGHTBOX
+   ========================================= */
+.portfolio-modal-overlay {
+  display: none;
+  position: fixed;
+  z-index: 9998;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(6, 19, 38, 0.85);
+  backdrop-filter: blur(8px);
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.portfolio-modal-overlay.active {
+  display: flex;
+  opacity: 1;
+}
+.portfolio-modal-box {
+  background: linear-gradient(145deg, #0a1128, #07101f);
+  width: 90%;
+  max-width: 1200px;
+  height: 85vh;
+  border-radius: 20px;
+  border: 1px solid rgba(224, 109, 36, 0.2);
+  box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: translateY(30px) scale(0.95);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.portfolio-modal-overlay.active .portfolio-modal-box {
+  transform: translateY(0) scale(1);
+}
+.portfolio-modal-close {
+  position: absolute;
+  top: 20px;
+  right: 25px;
+  color: rgba(255,255,255,0.6);
+  font-size: 36px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  transition: color 0.3s;
+  z-index: 10;
+  line-height: 1;
+}
+.portfolio-modal-close:hover {
+  color: #e06d24;
+}
+.portfolio-modal-header {
+  padding: 40px 40px 20px;
+  text-align: center;
+  flex-shrink: 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.portfolio-modal-header h2 {
+  font-family: "IM Fell French Canon", Georgia, serif;
+  font-size: 2.5rem;
+  color: #fff;
+  margin-bottom: 10px;
+}
+.portfolio-modal-header p {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1rem;
+}
+.portfolio-full-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
+  padding: 30px 40px;
+  overflow-y: auto;
+}
+.portfolio-full-grid::-webkit-scrollbar {
+  width: 8px;
+}
+.portfolio-full-grid::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0.2);
+}
+.portfolio-full-grid::-webkit-scrollbar-thumb {
+  background: #e06d24;
+  border-radius: 4px;
+}
+.portfolio-item {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  aspect-ratio: 4/5;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  background: #061326;
+  cursor: pointer;
+}
+.portfolio-item:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 30px rgba(224, 109, 36, 0.25);
+}
+.portfolio-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+.portfolio-item:hover img {
+  transform: scale(1.08);
+}
+
+/* Lightbox overlay on top of modal */
+.lightbox-modal {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0, 0, 0, 0.95);
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.lightbox-modal.active {
+  display: flex;
+  opacity: 1;
+}
+.lightbox-content {
+  position: relative;
+  max-width: 90%;
+  max-height: 90%;
+}
+.lightbox-content img {
+  max-width: 100%;
+  max-height: 90vh;
+  border-radius: 8px;
+  box-shadow: 0 15px 50px rgba(0,0,0,0.5);
+  object-fit: contain;
+}
+.lightbox-close {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  color: #fff;
+  font-size: 40px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  transition: color 0.3s;
+  line-height: 1;
+}
+.lightbox-close:hover {
+  color: #e06d24;
 }

@@ -14,12 +14,12 @@ class ChatbotOption extends Model
     public function findActiveResponse(string $option): ?string
     {
         $row = $this->findOne([
-            'option_number' => $option,
+            'option_key' => $option,
             'is_active' => 1, // <--- A MÁGICA FOI AQUI: Mudamos de 'active' para 'is_active'
         ], [
-            'response',
+            'response_text',
         ]);
 
-        return $row['response'] ?? null;
+        return $row['response_text'] ?? null;
     }
 }
