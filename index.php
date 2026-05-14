@@ -30,7 +30,6 @@
       <a href="#servicos">Servicios</a>
       <a href="#portfolio">Portafolio</a>
       <a href="#sobre">Sobre Nosotros</a>
-      <a href="agendar.php">Agendar</a>
       <a href="#contato">Contacto</a>
     </nav>
     <a href="agendar.php" class="btn-header btn-agendar">

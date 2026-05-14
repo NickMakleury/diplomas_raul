@@ -22,4 +22,4 @@ class ChatbotOption extends Model
 
         return $row['response_text'] ?? null;
     }
-}
+}   
