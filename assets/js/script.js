@@ -361,6 +361,85 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
+  // ---------------------------------------------------------
+  // 6. MÓDULO DO FORMULÁRIO DE AGENDAMENTO
+  // ---------------------------------------------------------
+  const initFormAgendamento = () => {
+    const form     = document.getElementById("form-agendamento");
+    const feedback = document.getElementById("agend-feedback");
+    const btnSubmit = document.getElementById("agend-btn-submit");
+    if (!form || !feedback || !btnSubmit) return;
+
+    const btnText    = btnSubmit.querySelector(".agend-btn-text");
+    const btnLoading = btnSubmit.querySelector(".agend-btn-loading");
+
+    const showFeedback = (tipo, mensagem) => {
+      feedback.className = `agend-feedback ${tipo}`;
+      feedback.innerHTML = mensagem;
+      feedback.classList.remove("hidden");
+      feedback.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    };
+
+    const setLoading = (loading) => {
+      btnSubmit.disabled = loading;
+      if (loading) {
+        btnText.classList.add("hidden");
+        btnLoading.classList.remove("hidden");
+      } else {
+        btnText.classList.remove("hidden");
+        btnLoading.classList.add("hidden");
+      }
+    };
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      feedback.classList.add("hidden");
+
+      // Validação no client-side
+      const nome  = form.nome.value.trim();
+      const email = form.email.value.trim();
+      const data  = form.data_formatura.value;
+      const curso = form.curso.value.trim();
+
+      if (!nome || !email || !data || !curso) {
+        showFeedback("erro", "⚠️ Preencha todos os campos obrigatórios (marcados com *).");
+        return;
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        showFeedback("erro", "⚠️ Informe um endereço de e-mail válido.");
+        return;
+      }
+
+      setLoading(true);
+
+      try {
+        const body = new FormData(form);
+        const response = await fetch("backend/agendar.php", {
+          method: "POST",
+          body,
+        });
+
+        const data_resp = await response.json();
+
+        if (data_resp.sucesso) {
+          showFeedback(
+            "sucesso",
+            `✅ <strong>Agendamento solicitado!</strong> Confira o seu e-mail — enviamos uma confirmação para <strong>${email}</strong>. O Raúl entrará em contato em breve! 🎓`
+          );
+          form.reset();
+        } else {
+          showFeedback("erro", `❌ ${data_resp.mensagem || "Ocorreu um erro. Tente novamente."}`);
+        }
+      } catch (err) {
+        showFeedback("erro", "❌ Erro de conexão. Verifique sua internet e tente novamente.");
+      } finally {
+        setLoading(false);
+      }
+    });
+  };
+
   // =========================================================
   // BOOTSTRAP - INICIALIZAÇÃO DA APLICAÇÃO
   // =========================================================
@@ -369,4 +448,5 @@ document.addEventListener("DOMContentLoaded", () => {
   initChatbot();
   initInteractions();
   initMobileMenu();
+  initFormAgendamento();
 });

@@ -61,82 +61,82 @@ function getManualResponse($message)
     $studioProfile = require __DIR__ . '/studio_profile.php';
     $normalized = mb_strtolower(trim($message));
 
-    // 1. Tenta buscar no banco de dados primeiro (caso você cadastre algo lá no futuro)
+    // 1. Tenta buscar no banco de dados primeiro
     $optionResponse = getManualOptionResponse($normalized);
     if ($optionResponse !== null) {
         return $optionResponse;
     }
 
     // Opção 5 - Mostrar Menu
-    if (in_array($normalized, ['5', 'menu', 'opções', 'opcoes', 'oi', 'olá', 'ola'], true)) {
+    if (in_array($normalized, ['5', 'menu', 'opciones', 'hola'], true)) {
         return buildManualMenu();
     }
 
     // Opção 1 - Serviços
-    if (in_array($normalized, ['1']) || containsAny($normalized, ['servico', 'serviço', 'fotos', 'trabalhos'])) {
+    if (in_array($normalized, ['1']) || containsAny($normalized, ['servicio', 'servicios', 'fotos', 'trabajos'])) {
         $servicos = $studioProfile['servicos'] ?? [];
-        return "Nossos serviços de fotografia:\n- " . implode("\n- ", $servicos);
+        return "Nuestros servicios de fotografía:\n- " . implode("\n- ", $servicos);
     }
 
-    // Opção 2 - Horário (Ajustado para ler exatamente os dados do seu studio_profile)
-    if (in_array($normalized, ['2']) || containsAny($normalized, ['horario', 'horário', 'funcionamento'])) {
+    // Opção 2 - Horário
+    if (in_array($normalized, ['2']) || containsAny($normalized, ['horario', 'funcionamiento'])) {
         $h = $studioProfile['horario'] ?? [];
-        return "Horário de atendimento:\n"
-            . "- Segunda a quinta: " . ($h['segunda_a_quinta'] ?? '-') . "\n"
-            . "- Sexta: " . ($h['sexta'] ?? '-') . "\n"
+        return "Horario de atención:\n"
+            . "- Lunes a jueves: " . ($h['segunda_a_quinta'] ?? '-') . "\n"
+            . "- Viernes: " . ($h['sexta'] ?? '-') . "\n"
             . "- Sábado: " . ($h['sabado'] ?? '-') . "\n"
-            . "- Domingo: " . ($h['domingo'] ?? 'Fechado');
+            . "- Domingo: " . ($h['domingo'] ?? 'Cerrado');
     }
 
     // Opção 3 - Endereço
-    if (in_array($normalized, ['3']) || containsAny($normalized, ['endereco', 'endereço', 'localizacao', 'localização', 'onde fica'])) {
-        return "Nosso estúdio fica em: " . ($studioProfile['endereco'] ?? 'Não informado.');
+    if (in_array($normalized, ['3']) || containsAny($normalized, ['direccion', 'dirección', 'ubicacion', 'ubicación', 'donde queda'])) {
+        return "Nuestro estudio está en: " . ($studioProfile['endereco'] ?? 'No informado.');
     }
 
     // Opção 4 - Falar com o Raúl
-    if (in_array($normalized, ['4', 'raul', 'falar', 'humano'])) {
+    if (in_array($normalized, ['4', 'raul', 'hablar', 'humano'])) {
         $wpp = $studioProfile['whatsapp'] ?? '';
-        return "Para falar diretamente com o Raúl, chame neste WhatsApp: {$wpp}";
+        return "Para hablar directamente con Raúl, escríbele a este WhatsApp: {$wpp}";
     }
 
     // Opção 6 - Escolas Parceiras
-    if (in_array($normalized, ['6', 'parcerias', 'escolas', 'faculdades'], true)) {
-        $parceiros = implode(', ', $studioProfile['parcerias'] ?? ['Nenhuma informada']);
-        return "Trabalhamos em parceria com: {$parceiros}.";
+    if (in_array($normalized, ['6', 'alianzas', 'escuelas', 'facultades'], true)) {
+        $parceiros = implode(', ', $studioProfile['parcerias'] ?? ['Ninguna informada']);
+        return "Trabajamos en alianza con: {$parceiros}.";
     }
 
     // Opção 7 - Formas de pagamento
-    if (in_array($normalized, ['7', 'pagamento', 'pagamentos', 'formas de pagamento'], true)) {
-        $pagamentos = implode(', ', $studioProfile['formas_pagamento'] ?? ['Consulte no atendimento']);
-        return "Formas de pagamento aceitas: {$pagamentos}.";
+    if (in_array($normalized, ['7', 'pago', 'pagos', 'formas de pago'], true)) {
+        $pagamentos = implode(', ', $studioProfile['formas_pagamento'] ?? ['Consulta en atención']);
+        return "Formas de pago aceptadas: {$pagamentos}.";
     }
 
     // Opção 8 - Valores
-    if (in_array($normalized, ['8', 'preco', 'preços', 'precos', 'valor', 'valores'], true)) {
+    if (in_array($normalized, ['8', 'precio', 'precios', 'valor', 'valores'], true)) {
         $faixa = $studioProfile['faixa_valores'] ?? [];
-        return "Sobre nossos valores:\n" . ($faixa['orcamentos'] ?? 'Consulte diretamente com o Raúl.');
+        return "Sobre nuestros valores:\n" . ($faixa['orcamentos'] ?? 'Consulta directamente con Raúl.');
     }
 
     // Opção 10 - Agendar
-    if (in_array($normalized, ['10', 'agendar', 'marcar'])) {
-        return "Para agendar, basta escolher o serviço desejado e nos informar a data, ou chamar no WhatsApp!";
+    if (in_array($normalized, ['10', 'agendar', 'reservar'])) {
+        return "Para reservar, solo elige el servicio deseado y dinos la fecha, ¡o escríbenos por WhatsApp!";
     }
 
-    // Se a pessoa digitar qualquer outra coisa que não é um número válido, mostra o menu.
-    return "Como posso ajudar? Escolha uma opção digitando o NÚMERO correspondente:\n\n" . buildManualMenu();
+    // Se a pessoa digitar qualquer outra coisa
+    return "¿Cómo puedo ayudarte? Elige una opción escribiendo el NÚMERO correspondiente:\n\n" . buildManualMenu();
 }
 
 function buildManualMenu()
 {
-    return "1 - Conhecer serviços de fotografia\n"
-        . "2 - Horário do estúdio\n"
-        . "3 - Endereço do estúdio\n"
-        . "4 - Falar com o Raúl\n"
-        . "5 - Ver opções novamente\n"
-        . "6 - Escolas parceiras\n"
-        . "7 - Formas de pagamento\n"
-        . "8 - Valores dos pacotes\n"
-        . "10 - Como agendar meu ensaio";
+    return "1 - Conocer servicios de fotografía\n"
+        . "2 - Horario del estudio\n"
+        . "3 - Dirección del estudio\n"
+        . "4 - Hablar con Raúl\n"
+        . "5 - Ver opciones nuevamente\n"
+        . "6 - Escuelas en alianza\n"
+        . "7 - Formas de pago\n"
+        . "8 - Valores de los paquetes\n"
+        . "10 - Cómo agendar mi sesión";
 }
 
 function containsAny($haystack, $keywords)
