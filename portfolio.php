@@ -7,6 +7,7 @@
   <title>Portafolio Completo | Diplomas Raúl</title>
   <link rel="stylesheet" href="assets/css/style.css" />
   <link href="https://fonts.googleapis.com/css2?family=IMFellFrenchCanon&family=Great+Vibes&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     /* Estilos extras específicos para o portfólio completo */
     .portfolio-page-header {
@@ -127,6 +128,13 @@
 </head>
 
 <body>
+  <!-- Custom Cursor -->
+  <div class="cursor-dot" data-cursor-dot></div>
+  <div class="cursor-outline" data-cursor-outline></div>
+
+  <!-- Page Transition -->
+  <div class="page-transition active"></div>
+
   <header class="header">
     <div class="logo">
       <a href="index.php" style="text-decoration:none; display:flex; align-items:center;">
@@ -182,40 +190,6 @@
     </div>
   </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const modal = document.getElementById('lightbox');
-      const modalImg = document.getElementById('lightbox-img');
-      const closeBtn = document.getElementById('lightbox-close');
-      const items = document.querySelectorAll('.portfolio-item img');
-
-      items.forEach(img => {
-        img.addEventListener('click', () => {
-          modalImg.src = img.src;
-          modal.classList.add('active');
-          document.body.style.overflow = 'hidden'; // impede rolagem da pagina
-        });
-      });
-
-      closeBtn.addEventListener('click', () => {
-        modal.classList.remove('active');
-        document.body.style.overflow = '';
-      });
-
-      modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-          modal.classList.remove('active');
-          document.body.style.overflow = '';
-        }
-      });
-      
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.classList.contains('active')) {
-          modal.classList.remove('active');
-          document.body.style.overflow = '';
-        }
-      });
-    });
-  </script>
+  <script src="assets/js/script.js"></script>
 </body>
 </html>
