@@ -265,7 +265,7 @@ document.addEventListener("DOMContentLoaded", () => {
         conversationId = 0;
         chatBox.innerHTML =
           '<div class="message bot">Sessão encerrada. Quando quiser, envie um "Oi" para recomeçar.</div>';
-      } catch (error) {}
+      } catch (error) { }
     });
 
     // -----------------------------------------------------
@@ -338,12 +338,12 @@ document.addEventListener("DOMContentLoaded", () => {
   // 6. MÓDULO DO FORMULÁRIO DE AGENDAMENTO
   // ---------------------------------------------------------
   const initFormAgendamento = () => {
-    const form     = document.getElementById("form-agendamento");
+    const form = document.getElementById("form-agendamento");
     const feedback = document.getElementById("agend-feedback");
     const btnSubmit = document.getElementById("agend-btn-submit");
     if (!form || !feedback || !btnSubmit) return;
 
-    const btnText    = btnSubmit.querySelector(".agend-btn-text");
+    const btnText = btnSubmit.querySelector(".agend-btn-text");
     const btnLoading = btnSubmit.querySelector(".agend-btn-loading");
 
     const showFeedback = (tipo, mensagem) => {
@@ -369,9 +369,9 @@ document.addEventListener("DOMContentLoaded", () => {
       feedback.classList.add("hidden");
 
       // Validação no client-side
-      const nome  = form.nome.value.trim();
+      const nome = form.nome.value.trim();
       const email = form.email.value.trim();
-      const data  = form.data_formatura.value;
+      const data = form.data_formatura.value;
       const curso = form.curso.value.trim();
 
       if (!nome || !email || !data || !curso) {
@@ -420,7 +420,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnOpen = document.getElementById('btn-open-portfolio');
     const modalPortfolio = document.getElementById('portfolio-modal');
     const closePortfolio = document.getElementById('portfolio-modal-close');
-    
+
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightbox-img');
     const closeLightbox = document.getElementById('lightbox-close');
@@ -477,6 +477,92 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
 
+  // ---------------------------------------------------------
+  // 8. MÓDULO DE INTERFACE PREMIUM (Cursor, Transição, FAQ, Depoimentos)
+  // ---------------------------------------------------------
+  const initPremiumFeatures = () => {
+    // Page Transition
+    const transitionEl = document.querySelector('.page-transition');
+    if (transitionEl) {
+      setTimeout(() => {
+        transitionEl.classList.remove('active');
+      }, 500);
+
+      document.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', e => {
+          const target = link.getAttribute('href');
+          if (target && !target.startsWith('#') && !target.startsWith('javascript') && link.target !== '_blank') {
+            e.preventDefault();
+            transitionEl.classList.add('active');
+            setTimeout(() => {
+              window.location.href = target;
+            }, 500);
+          }
+        });
+      });
+    }
+
+    // Custom Cursor
+    const cursorDot = document.querySelector('[data-cursor-dot]');
+    const cursorOutline = document.querySelector('[data-cursor-outline]');
+
+    if (cursorDot && cursorOutline) {
+      window.addEventListener('mousemove', (e) => {
+        const posX = e.clientX;
+        const posY = e.clientY;
+
+        cursorDot.style.left = `${posX}px`;
+        cursorDot.style.top = `${posY}px`;
+
+        cursorOutline.animate({
+          left: `${posX}px`,
+          top: `${posY}px`
+        }, { duration: 500, fill: "forwards" });
+      });
+    }
+
+    // Testimonials Carousel
+    const track = document.querySelector('.testimonial-track');
+    const indicators = document.querySelectorAll('.indicator');
+    if (track && indicators.length > 0) {
+      let currentSlide = 0;
+      const slideCount = indicators.length;
+
+      const updateCarousel = (index) => {
+        track.style.transform = `translateX(-${index * 100}%)`;
+        indicators.forEach(ind => ind.classList.remove('active'));
+        indicators[index].classList.add('active');
+      };
+
+      indicators.forEach((ind, index) => {
+        ind.addEventListener('click', () => {
+          currentSlide = index;
+          updateCarousel(currentSlide);
+        });
+      });
+
+      // Auto play
+      setInterval(() => {
+        currentSlide = (currentSlide + 1) % slideCount;
+        updateCarousel(currentSlide);
+      }, 5000);
+    }
+
+    // FAQ Accordion
+    const faqQuestions = document.querySelectorAll('.faq-question');
+    faqQuestions.forEach(q => {
+      q.addEventListener('click', () => {
+        q.classList.toggle('active');
+        const answer = q.nextElementSibling;
+        if (q.classList.contains('active')) {
+          answer.style.maxHeight = answer.scrollHeight + 'px';
+        } else {
+          answer.style.maxHeight = '0';
+        }
+      });
+    });
+  };
+
   // =========================================================
   // BOOTSTRAP - INICIALIZAÇÃO DA APLICAÇÃO
   // =========================================================
@@ -487,4 +573,5 @@ document.addEventListener("DOMContentLoaded", () => {
   initMobileMenu();
   initFormAgendamento();
   initPortfolioModal();
+  initPremiumFeatures();
 });

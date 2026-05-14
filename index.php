@@ -7,9 +7,17 @@
   <title>Diplomas Raúl</title>
   <link rel="stylesheet" href="assets/css/style.css" />
   <link href="https://fonts.googleapis.com/css2?family=IMFellFrenchCanon&family=Great+Vibes&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
+  <!-- Custom Cursor -->
+  <div class="cursor-dot" data-cursor-dot></div>
+  <div class="cursor-outline" data-cursor-outline></div>
+
+  <!-- Page Transition -->
+  <div class="page-transition active"></div>
+
   <div id="scroll-progress"></div>
 
   <header class="header animate-fade-in">
@@ -158,6 +166,58 @@
     </div>
   </section>
 
+  <!-- Testimonials Section -->
+  <section class="testimonials" id="depoimentos">
+    <div class="testimonials-header reveal">
+      <h2>Depoimentos</h2>
+      <div class="line"></div>
+      <p>O que nossos clientes dizem sobre nós.</p>
+    </div>
+    
+    <div class="testimonial-carousel reveal">
+      <div class="testimonial-track">
+        <div class="testimonial-card">
+          <div class="quote-icon">“</div>
+          <p class="testimonial-text">O Raúl capturou a essência do meu momento de formatura. As fotos ficaram incríveis e o atendimento foi impecável. Recomendo de olhos fechados!</p>
+          <div class="testimonial-author">
+            <div class="author-info">
+              <h4>Maria Fernanda</h4>
+              <span>Medicina — UFBA</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="testimonial-card">
+          <div class="quote-icon">“</div>
+          <p class="testimonial-text">Nunca me senti tão à vontade em uma sessão de fotos. O resultado foi um álbum emocionante que toda minha família amou.</p>
+          <div class="testimonial-author">
+            <div class="author-info">
+              <h4>Lucas Mendes</h4>
+              <span>Engenharia Civil — UEFS</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="testimonial-card">
+          <div class="quote-icon">“</div>
+          <p class="testimonial-text">Profissionalismo do início ao fim. As fotos têm uma qualidade de cinema e a entrega foi super rápida. Valeu cada centavo.</p>
+          <div class="testimonial-author">
+            <div class="author-info">
+              <h4>Camila Souza</h4>
+              <span>Direito — UNEB</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="carousel-indicators">
+        <button class="indicator active" data-slide="0"></button>
+        <button class="indicator" data-slide="1"></button>
+        <button class="indicator" data-slide="2"></button>
+      </div>
+    </div>
+  </section>
+
   <section class="about" id="sobre">
     <div class="about-image reveal">
       <img src="assets/imagem/foto3.jpg" alt="Edificio clásico" />
@@ -176,7 +236,36 @@
     </div>
   </section>
 
-
+  <!-- FAQ Section -->
+  <section class="faq-section" id="faq">
+    <div class="faq-header reveal">
+      <h2>Dúvidas Frequentes</h2>
+      <div class="line"></div>
+    </div>
+    
+    <div class="faq-container reveal">
+      <div class="faq-item">
+        <button class="faq-question">Quanto tempo dura uma sessão fotográfica? <span class="faq-icon">+</span></button>
+        <div class="faq-answer">
+          <p>As sessões individuais duram em média 1h a 2h, garantindo tempo suficiente para trocas de roupa, diferentes cenários e para que você se sinta confortável em frente à câmera.</p>
+        </div>
+      </div>
+      
+      <div class="faq-item">
+        <button class="faq-question">Vocês fornecem a beca e o capelo? <span class="faq-icon">+</span></button>
+        <div class="faq-answer">
+          <p>Sim! Para as sessões de formatura, disponibilizamos beca tradicional, capelo e canudo simbólico para deixar suas fotos completas.</p>
+        </div>
+      </div>
+      
+      <div class="faq-item">
+        <button class="faq-question">Qual é o prazo de entrega das fotos? <span class="faq-icon">+</span></button>
+        <div class="faq-answer">
+          <p>As fotos recebem um tratamento profissional de cor e iluminação e são entregues em até 7 dias úteis após a sessão, através de uma galeria digital privada.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <section class="cta-footer" id="contato">
     <div class="cta-title reveal">

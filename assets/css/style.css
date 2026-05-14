@@ -7,7 +7,7 @@
 body {
   background: #0a1128;
   color: #fff;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Outfit', Arial, Helvetica, sans-serif;
   overflow-x: hidden;
   width: 100%;
   margin: 0;
@@ -160,6 +160,15 @@ body {
   top: 0;
   left: 0;
   z-index: 20;
+  transition: background 0.4s ease, backdrop-filter 0.4s ease;
+}
+
+.header.scrolled {
+  position: fixed;
+  background: rgba(10, 17, 40, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .logo {
@@ -2323,13 +2332,15 @@ body {
    SEÇÃO DE AGENDAMENTO
    ========================================================================= */
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .agendamento-section {
   background: linear-gradient(180deg, #061326 0%, #0a1128 100%);
-  border-top: 1px solid rgba(255,255,255,0.07);
-  border-bottom: 1px solid rgba(255,255,255,0.07);
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
   padding: 90px 65px;
 }
 
@@ -2377,7 +2388,7 @@ body {
 }
 
 .agend-desc {
-  color: rgba(255,255,255,0.6);
+  color: rgba(255, 255, 255, 0.6);
   font-size: 15px;
   line-height: 1.7;
   max-width: 360px;
@@ -2394,7 +2405,7 @@ body {
   display: flex;
   align-items: center;
   gap: 14px;
-  color: rgba(255,255,255,0.75);
+  color: rgba(255, 255, 255, 0.75);
   font-size: 14px;
   transition: color 0.25s ease;
 }
@@ -2424,21 +2435,21 @@ body {
 
 /* ── Formulário (coluna direita) ─────────────────────────────────────────── */
 .agend-form-card {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.09);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 4px;
   overflow: hidden;
-  box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
   transition: box-shadow 0.4s ease;
 }
 
 .agend-form-card:hover {
-  box-shadow: 0 30px 70px rgba(0,0,0,0.55);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.55);
 }
 
 .agend-form-header {
-  background: linear-gradient(90deg, rgba(224,109,36,0.15), rgba(74,123,165,0.08));
-  border-bottom: 1px solid rgba(224,109,36,0.2);
+  background: linear-gradient(90deg, rgba(224, 109, 36, 0.15), rgba(74, 123, 165, 0.08));
+  border-bottom: 1px solid rgba(224, 109, 36, 0.2);
   padding: 18px 30px;
   display: flex;
   align-items: center;
@@ -2474,7 +2485,7 @@ body {
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: rgba(255,255,255,0.5);
+  color: rgba(255, 255, 255, 0.5);
   display: flex;
   align-items: center;
   gap: 7px;
@@ -2491,7 +2502,7 @@ body {
 }
 
 .agend-opcional {
-  color: rgba(255,255,255,0.3);
+  color: rgba(255, 255, 255, 0.3);
   font-size: 11px;
   text-transform: none;
   letter-spacing: 0;
@@ -2499,8 +2510,8 @@ body {
 
 .agend-field input,
 .agend-field textarea {
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 3px;
   padding: 12px 16px;
   color: #fff;
@@ -2521,7 +2532,7 @@ body {
 
 .agend-field input::placeholder,
 .agend-field textarea::placeholder {
-  color: rgba(255,255,255,0.25);
+  color: rgba(255, 255, 255, 0.25);
 }
 
 /* Estilo do date input */
@@ -2609,7 +2620,7 @@ body {
 
 .agend-privacy {
   font-size: 11px;
-  color: rgba(255,255,255,0.3);
+  color: rgba(255, 255, 255, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2667,8 +2678,10 @@ body {
   display: none;
   position: fixed;
   z-index: 9998;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background-color: rgba(6, 19, 38, 0.85);
   backdrop-filter: blur(8px);
   align-items: center;
@@ -2676,10 +2689,12 @@ body {
   opacity: 0;
   transition: opacity 0.4s ease;
 }
+
 .portfolio-modal-overlay.active {
   display: flex;
   opacity: 1;
 }
+
 .portfolio-modal-box {
   background: linear-gradient(145deg, #0a1128, #07101f);
   width: 90%;
@@ -2687,7 +2702,7 @@ body {
   height: 85vh;
   border-radius: 20px;
   border: 1px solid rgba(224, 109, 36, 0.2);
-  box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
   position: relative;
   display: flex;
   flex-direction: column;
@@ -2695,14 +2710,16 @@ body {
   transform: translateY(30px) scale(0.95);
   transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
+
 .portfolio-modal-overlay.active .portfolio-modal-box {
   transform: translateY(0) scale(1);
 }
+
 .portfolio-modal-close {
   position: absolute;
   top: 20px;
   right: 25px;
-  color: rgba(255,255,255,0.6);
+  color: rgba(255, 255, 255, 0.6);
   font-size: 36px;
   cursor: pointer;
   background: none;
@@ -2711,25 +2728,30 @@ body {
   z-index: 10;
   line-height: 1;
 }
+
 .portfolio-modal-close:hover {
   color: #e06d24;
 }
+
 .portfolio-modal-header {
   padding: 40px 40px 20px;
   text-align: center;
   flex-shrink: 0;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
+
 .portfolio-modal-header h2 {
   font-family: "IM Fell French Canon", Georgia, serif;
   font-size: 2.5rem;
   color: #fff;
   margin-bottom: 10px;
 }
+
 .portfolio-modal-header p {
   color: rgba(255, 255, 255, 0.6);
   font-size: 1rem;
 }
+
 .portfolio-full-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -2737,16 +2759,20 @@ body {
   padding: 30px 40px;
   overflow-y: auto;
 }
+
 .portfolio-full-grid::-webkit-scrollbar {
   width: 8px;
 }
+
 .portfolio-full-grid::-webkit-scrollbar-track {
-  background: rgba(0,0,0,0.2);
+  background: rgba(0, 0, 0, 0.2);
 }
+
 .portfolio-full-grid::-webkit-scrollbar-thumb {
   background: #e06d24;
   border-radius: 4px;
 }
+
 .portfolio-item {
   position: relative;
   border-radius: 12px;
@@ -2757,16 +2783,19 @@ body {
   background: #061326;
   cursor: pointer;
 }
+
 .portfolio-item:hover {
   transform: translateY(-8px);
   box-shadow: 0 15px 30px rgba(224, 109, 36, 0.25);
 }
+
 .portfolio-item img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.6s ease;
 }
+
 .portfolio-item:hover img {
   transform: scale(1.08);
 }
@@ -2776,30 +2805,36 @@ body {
   display: none;
   position: fixed;
   z-index: 9999;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background-color: rgba(0, 0, 0, 0.95);
   align-items: center;
   justify-content: center;
   opacity: 0;
   transition: opacity 0.3s ease;
 }
+
 .lightbox-modal.active {
   display: flex;
   opacity: 1;
 }
+
 .lightbox-content {
   position: relative;
   max-width: 90%;
   max-height: 90%;
 }
+
 .lightbox-content img {
   max-width: 100%;
   max-height: 90vh;
   border-radius: 8px;
-  box-shadow: 0 15px 50px rgba(0,0,0,0.5);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
   object-fit: contain;
 }
+
 .lightbox-close {
   position: absolute;
   top: -40px;
@@ -2812,6 +2847,253 @@ body {
   transition: color 0.3s;
   line-height: 1;
 }
+
 .lightbox-close:hover {
   color: #e06d24;
-}
+}
+
+/* =========================================
+   UI REVAMP NEW STYLES
+   ========================================= */
+
+/* --- Custom Cursor --- */
+body {
+  cursor: none;
+  /* Hide default cursor */
+}
+
+.cursor-dot {
+  width: 8px;
+  height: 8px;
+  background-color: #e06d24;
+  border-radius: 50%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 99999;
+  transition: width 0.2s, height 0.2s;
+}
+
+.cursor-outline {
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(224, 109, 36, 0.5);
+  border-radius: 50%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 99998;
+  transition: width 0.2s, height 0.2s, background-color 0.2s;
+}
+
+/* Hover effect on clickable elements */
+a:hover~.cursor-outline,
+button:hover~.cursor-outline,
+.portfolio-card:hover~.cursor-outline {
+  width: 60px;
+  height: 60px;
+  background-color: rgba(224, 109, 36, 0.1);
+  border-color: rgba(224, 109, 36, 0.8);
+}
+
+/* --- Page Transition Overlay --- */
+.page-transition {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #0a1128;
+  z-index: 999999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+
+.page-transition.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* --- Testimonials Section --- */
+.testimonials {
+  padding: 80px 40px;
+  background: linear-gradient(135deg, #07101f 0%, #061326 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  text-align: center;
+}
+
+.testimonials-header h2 {
+  font-family: Georgia, serif;
+  color: #4a7ba5;
+  font-size: 32px;
+  text-transform: uppercase;
+}
+
+.testimonials-header .line {
+  margin: 15px auto;
+  background: #4a7ba5;
+}
+
+.testimonials-header p {
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 50px;
+}
+
+.testimonial-carousel {
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.testimonial-track {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+
+.testimonial-card {
+  min-width: 100%;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.quote-icon {
+  font-family: Georgia, serif;
+  font-size: 60px;
+  color: #e06d24;
+  line-height: 0.5;
+  margin-bottom: 10px;
+}
+
+.testimonial-text {
+  font-size: 18px;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.6;
+  margin-bottom: 30px;
+  max-width: 700px;
+}
+
+.author-info h4 {
+  color: #e06d24;
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.author-info span {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.carousel-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 30px;
+}
+
+.indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.indicator.active {
+  background: #e06d24;
+  transform: scale(1.3);
+}
+
+/* --- FAQ Section --- */
+.faq-section {
+  padding: 80px 40px;
+  background: #0a1128;
+}
+
+.faq-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.faq-header h2 {
+  font-family: Georgia, serif;
+  color: #4a7ba5;
+  font-size: 32px;
+  text-transform: uppercase;
+}
+
+.faq-header .line {
+  margin: 15px auto;
+  background: #4a7ba5;
+}
+
+.faq-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.faq-item {
+  margin-bottom: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.faq-question {
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  padding: 20px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  font-family: 'Outfit', sans-serif;
+  transition: color 0.3s;
+}
+
+.faq-question:hover {
+  color: #e06d24;
+}
+
+.faq-icon {
+  font-size: 24px;
+  color: #e06d24;
+  transition: transform 0.3s;
+}
+
+.faq-question.active .faq-icon {
+  transform: rotate(45deg);
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+
+.faq-answer p {
+  padding-bottom: 20px;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.6;
+}

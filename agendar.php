@@ -7,6 +7,7 @@
   <meta name="description" content="Reserve sua sessão fotográfica de formatura com Diplomas Raúl. Confirmação por e-mail imediata." />
   <link rel="stylesheet" href="assets/css/style.css" />
   <link href="https://fonts.googleapis.com/css2?family=IMFellFrenchCanon&family=Great+Vibes&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     /* ── Página de Agendamento ── */
     body { background: #07101f; }
@@ -272,6 +273,13 @@
 </head>
 <body>
 
+  <!-- Custom Cursor -->
+  <div class="cursor-dot" data-cursor-dot></div>
+  <div class="cursor-outline" data-cursor-outline></div>
+
+  <!-- Page Transition -->
+  <div class="page-transition active"></div>
+
   <!-- HEADER -->
   <header class="agendar-page-header">
     <a href="index.php" class="logo">
@@ -468,6 +476,7 @@
     © 2025 Diplomas Raúl · Todos os direitos reservados
   </footer>
 
+  <script src="assets/js/script.js"></script>
   <script>
     const form = document.getElementById('form-agendamento');
     const feedback = document.getElementById('agend-feedback');
@@ -476,37 +485,39 @@
     const btn = document.getElementById('agend-btn-submit');
     const successScreen = document.getElementById('success-screen');
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      feedback.className = 'agend-feedback hidden';
+    if(form) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        feedback.className = 'agend-feedback hidden';
 
-      btnText.classList.add('hidden');
-      btnLoading.classList.remove('hidden');
-      btn.disabled = true;
+        btnText.classList.add('hidden');
+        btnLoading.classList.remove('hidden');
+        btn.disabled = true;
 
-      try {
-        const res = await fetch('backend/agendar.php', {
-          method: 'POST',
-          body: new FormData(form)
-        });
-        const data = await res.json();
+        try {
+          const res = await fetch('backend/agendar.php', {
+            method: 'POST',
+            body: new FormData(form)
+          });
+          const data = await res.json();
 
-        if (data.sucesso) {
-          form.classList.add('hidden');
-          successScreen.classList.add('visible');
-        } else {
-          feedback.textContent = '✕ ' + (data.mensagem || 'Erro ao enviar. Tente novamente.');
+          if (data.sucesso) {
+            form.classList.add('hidden');
+            successScreen.classList.add('visible');
+          } else {
+            feedback.textContent = '✕ ' + (data.mensagem || 'Erro ao enviar. Tente novamente.');
+            feedback.className = 'agend-feedback agend-feedback--erro';
+          }
+        } catch {
+          feedback.textContent = '✕ Erro de conexão. Tente novamente.';
           feedback.className = 'agend-feedback agend-feedback--erro';
+        } finally {
+          btnText.classList.remove('hidden');
+          btnLoading.classList.add('hidden');
+          btn.disabled = false;
         }
-      } catch {
-        feedback.textContent = '✕ Erro de conexão. Tente novamente.';
-        feedback.className = 'agend-feedback agend-feedback--erro';
-      } finally {
-        btnText.classList.remove('hidden');
-        btnLoading.classList.add('hidden');
-        btn.disabled = false;
-      }
-    });
+      });
+    }
   </script>
 </body>
 </html>
