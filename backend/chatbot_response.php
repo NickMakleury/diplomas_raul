@@ -19,6 +19,10 @@ $visitorName = trim($payload['visitor_name'] ?? '') ?: null;
 $visitorPhone = trim($payload['visitor_phone'] ?? '') ?: null;
 $visitorEmail = trim($payload['visitor_email'] ?? '') ?: null;
 
+// ── Links rápidos reutilizáveis ───────────────────────────
+define('LINK_AGENDAR',   'http://localhost/devweb/diplomas_raul/agendar.php');
+define('LINK_WHATSAPP',  'https://wa.me/+557587100691');
+
 if ($message === '') {
     http_response_code(422);
     echo json_encode(['error' => 'Mensagem vazia.']);
@@ -93,10 +97,10 @@ function getManualResponse($message)
         return "Nuestro estudio está en: " . ($studioProfile['endereco'] ?? 'No informado.');
     }
 
-    // Opção 4 - Falar com o Raúl
-    if (in_array($normalized, ['4', 'raul', 'hablar', 'humano'])) {
-        $wpp = $studioProfile['whatsapp'] ?? '';
-        return "Para hablar directamente con Raúl, escríbele a este WhatsApp: {$wpp}";
+    // Opção 4 - Falar com o Raúl / WhatsApp
+    if (in_array($normalized, ['4', 'raul', 'hablar', 'humano', 'whatsapp', 'wpp', 'zap']) ||
+        containsAny($normalized, ['whatsapp', 'zap', 'falar', 'contato', 'contact'])) {
+        return "Fale diretamente com o Raúl pelo WhatsApp 📲\n[👉 Abrir WhatsApp](" . LINK_WHATSAPP . ")";
     }
 
     // Opção 6 - Escolas Parceiras
@@ -117,9 +121,13 @@ function getManualResponse($message)
         return "Sobre nuestros valores:\n" . ($faixa['orcamentos'] ?? 'Consulta directamente con Raúl.');
     }
 
-    // Opção 10 - Agendar
-    if (in_array($normalized, ['10', 'agendar', 'reservar'])) {
-        return "Para reservar, solo elige el servicio deseado y dinos la fecha, ¡o escríbenos por WhatsApp!";
+    // Opção 10 - Agendar sessão
+    if (in_array($normalized, ['10', 'agendar', 'reservar', 'marcar']) ||
+        containsAny($normalized, ['agendar', 'reservar', 'marcar', 'sess', 'fotografia', 'foto'])) {
+        return "Ótimo! Você pode agendar sua sessão de duas formas:\n\n"
+             . "📋 [Formulário online — clique aqui](" . LINK_AGENDAR . ")\n"
+             . "📲 [WhatsApp direto com Raúl](" . LINK_WHATSAPP . ")\n\n"
+             . "Pelo formulário você já deixa todos os dados e o Raúl confirma em até 24h! 🎓";
     }
 
     // Se a pessoa digitar qualquer outra coisa
@@ -131,12 +139,12 @@ function buildManualMenu()
     return "1 - Conocer servicios de fotografía\n"
         . "2 - Horario del estudio\n"
         . "3 - Dirección del estudio\n"
-        . "4 - Hablar con Raúl\n"
+        . "4 - Hablar por WhatsApp con Raúl\n"
         . "5 - Ver opciones nuevamente\n"
         . "6 - Escuelas en alianza\n"
         . "7 - Formas de pago\n"
         . "8 - Valores de los paquetes\n"
-        . "10 - Cómo agendar mi sesión";
+        . "10 - Agendar / Reservar mi sesión";
 }
 
 function containsAny($haystack, $keywords)
@@ -171,7 +179,8 @@ function getAiResponse($userMessage, $companyName, $openRouter, $studioProfile, 
         . "6. TOQUE ARTÍSTICO: Usa lenguaje de fotografía (ej: 'resaltar tu perfil', 'buena iluminación', 'eternizar el momento'). "
         . "7. COMPROMISO: Cuando tenga sentido, termina con una pregunta corta para mantener el flujo de la conversación. "
         . "8. ENFOQUE: Redirige con educación los temas que no sean sobre fotografía. "
-        . "9. CONVERSIÓN: Conduce hacia la reserva pidiendo fecha o tipo de foto. "
+        . "9. CONVERSIÓN (CRÍTICO): Cuando el cliente quiera agendar, reservar una sesión, o pregunte cómo contactar a Raúl, DEBES responder EXACTAMENTE con este texto (sin modificar los links):\n"
+        . "'¡Perfecto! Puedes agendar de dos formas:\n📋 [Formulario online](" . LINK_AGENDAR . ")\n📲 [WhatsApp con Raúl](" . LINK_WHATSAPP . ")\n¿Tienes fecha estimada de tu graduación?'\n"
         . "10. CONTROL EMOCIONAL: Mantén siempre el tono profesional. "
         . "INFORMACIÓN OFICIAL DEL ESTUDIO FOTOGRÁFICO DE RAÚL:\n{$studioContext}";
 
@@ -257,7 +266,7 @@ function buildMessagesForAi($systemPrompt, $history, $currentMessage)
 function sanitizeAiText($text)
 {
     $text = preg_replace('/```[\s\S]*?```/u', '', $text);
-    $text = str_replace(['**', '__', '*', '_', '`'], '', $text);
+    $text = str_replace(['**', '__', '*', '`'], '', $text);
     $text = preg_replace("/\n{3,}/", "\n\n", $text);
 
     // O FILTRO ANTI-ALUCINAÇÃO QUE LIMPA JSON VAZADO:

@@ -148,7 +148,13 @@ document.addEventListener("DOMContentLoaded", () => {
     function addMessage(sender, text) {
       const div = document.createElement("div");
       div.className = `message ${sender === "user" ? "user" : "bot"}`;
-      div.textContent = text;
+      // Converte [texto](url) em link clicável
+      const html = text
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g,
+          '<a href="$2" target="_blank" rel="noopener" style="color:#e06d24;text-decoration:underline;">$1</a>')
+        .replace(/\n/g, '<br>');
+      div.innerHTML = html;
       chatBox.appendChild(div);
       chatBox.scrollTop = chatBox.scrollHeight;
     }
@@ -299,43 +305,10 @@ document.addEventListener("DOMContentLoaded", () => {
       }, 3500);
     };
 
-    const agendarBtns = document.querySelectorAll(
-      ".btn-header, .hero-buttons .btn-primary",
-    );
-    const chatContainer = document.getElementById("chatbot-container");
-    const chatToggle = document.getElementById("chatbot-toggle");
-    const chatInput =
-      document.getElementById("chatbot-input") ||
-      document.getElementById("message");
+    // Botões .btn-agendar agora abrem agendar.html diretamente (target=_blank)
+    // Não é necessário interceptar o clique aqui.
 
-    agendarBtns.forEach((btn) => {
-      btn.addEventListener("click", (e) => {
-        e.preventDefault();
-        if (chatContainer && chatContainer.classList.contains("hidden")) {
-          chatToggle.click(); // Já vai acionar a nova lógica de esconder a bolinha
-        }
-        setTimeout(() => {
-          if (chatInput) chatInput.focus();
-        }, 400);
-        showToast("Assistente virtual iniciado!");
-      });
-    });
-
-    const btnVerPortfolioHero = document.querySelector(
-      ".hero-buttons .btn-outline",
-    );
-    if (btnVerPortfolioHero) {
-      btnVerPortfolioHero.addEventListener("click", (e) => {
-        e.preventDefault();
-        const portfolioSection = document.getElementById("portfolio");
-        if (portfolioSection) {
-          window.scrollTo({
-            top: portfolioSection.offsetTop - 80,
-            behavior: "smooth",
-          });
-        }
-      });
-    }
+    // O botão btnVerPortfolioHero foi removido daqui porque agora abre uma nova aba.
   };
 
   // ---------------------------------------------------------
@@ -440,6 +413,70 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
 
+  // ---------------------------------------------------------
+  // 7. MÓDULO DO PORTFÓLIO MODAL & LIGHTBOX
+  // ---------------------------------------------------------
+  const initPortfolioModal = () => {
+    const btnOpen = document.getElementById('btn-open-portfolio');
+    const modalPortfolio = document.getElementById('portfolio-modal');
+    const closePortfolio = document.getElementById('portfolio-modal-close');
+    
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const closeLightbox = document.getElementById('lightbox-close');
+    const items = document.querySelectorAll('.portfolio-item img');
+
+    if (btnOpen && modalPortfolio) {
+      btnOpen.addEventListener('click', (e) => {
+        e.preventDefault();
+        modalPortfolio.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      });
+
+      closePortfolio.addEventListener('click', () => {
+        modalPortfolio.classList.remove('active');
+        document.body.style.overflow = '';
+      });
+
+      modalPortfolio.addEventListener('click', (e) => {
+        if (e.target === modalPortfolio) {
+          modalPortfolio.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      });
+    }
+
+    if (lightbox && items.length > 0) {
+      items.forEach(img => {
+        img.addEventListener('click', () => {
+          lightboxImg.src = img.src;
+          lightbox.classList.add('active');
+        });
+      });
+
+      closeLightbox.addEventListener('click', () => {
+        lightbox.classList.remove('active');
+      });
+
+      lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) {
+          lightbox.classList.remove('active');
+        }
+      });
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (lightbox && lightbox.classList.contains('active')) {
+          lightbox.classList.remove('active');
+        } else if (modalPortfolio && modalPortfolio.classList.contains('active')) {
+          modalPortfolio.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      }
+    });
+  };
+
   // =========================================================
   // BOOTSTRAP - INICIALIZAÇÃO DA APLICAÇÃO
   // =========================================================
@@ -449,4 +486,5 @@ document.addEventListener("DOMContentLoaded", () => {
   initInteractions();
   initMobileMenu();
   initFormAgendamento();
+  initPortfolioModal();
 });
