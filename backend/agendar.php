@@ -86,10 +86,21 @@ try {
     exit;
 }
 
-// ─── Formata a data para exibição ─────────────────────────────────────────────
+// ─── Formata a data para exibição e para o Google Calendar ────────────────────
 $data_obj    = new DateTime($data_formatura);
 $data_br     = $data_obj->format('d/m/Y');
 $data_longa  = $data_obj->format('d \\d\\e F \\d\\e Y');
+
+// O Google Calendar requer formato YYYYMMDD para eventos de dia inteiro.
+// O end_date precisa ser o dia seguinte.
+$gcal_start = $data_obj->format('Ymd');
+$data_obj_end = clone $data_obj;
+$data_obj_end->modify('+1 day');
+$gcal_end = $data_obj_end->format('Ymd');
+
+$gcal_title = urlencode("Sessão Fotográfica Diplomas Raúl - {$nome}");
+$gcal_details = urlencode("Agendamento #{$agendamento_id}\nCurso: {$curso}\n\nPara cancelar ou alterar, entre em contato.");
+$gcal_link = "https://calendar.google.com/calendar/render?action=TEMPLATE&text={$gcal_title}&dates={$gcal_start}/{$gcal_end}&details={$gcal_details}";
 
 // ─── Configurações de E-mail (ajuste aqui) ───────────────────────────────────
 // Use as credenciais do seu servidor SMTP (Gmail, Zoho, Mailgun, etc.)
@@ -123,7 +134,7 @@ function criarMailer(
 
 // ─── Template HTML do e-mail para o CLIENTE ──────────────────────────────────
 function templateCliente(
-    string $nome, string $curso, string $data_br, string $agendamento_id
+    string $nome, string $curso, string $data_br, string $agendamento_id, string $gcal_link
 ): string {
     return <<<HTML
 <!DOCTYPE html>
@@ -204,13 +215,16 @@ function templateCliente(
                 diretamente pelo WhatsApp caso tenha alguma dúvida.
               </p>
 
-              <!-- BOTÃO WHATSAPP -->
-              <table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;">
+              <!-- BOTÕES -->
+              <table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;width:100%;">
                 <tr>
-                  <td align="center"
-                      style="background:#25D366;border-radius:4px;">
+                  <td align="center">
+                    <a href="{$gcal_link}" target="_blank"
+                       style="display:inline-block;padding:12px 24px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);color:#fff;text-decoration:none;font-size:13px;border-radius:4px;margin-right:10px;margin-bottom:10px;">
+                      📅 Adicionar ao Google Calendar
+                    </a>
                     <a href="https://wa.me/+557587100691"
-                       style="display:inline-block;padding:14px 30px;color:#fff;text-decoration:none;font-size:14px;letter-spacing:1px;text-transform:uppercase;">
+                       style="display:inline-block;padding:12px 24px;background:#25D366;color:#fff;text-decoration:none;font-size:13px;border-radius:4px;font-weight:bold;margin-bottom:10px;">
                       💬 Falar pelo WhatsApp
                     </a>
                   </td>
@@ -343,7 +357,7 @@ try {
     $mail->addAddress($email, $nome);
     $mail->isHTML(true);
     $mail->Subject = "✅ Raúl Diplomas — Agendamento #{$agendamento_id} recebido!";
-    $mail->Body    = templateCliente($nome, $curso, $data_br, (string)$agendamento_id);
+    $mail->Body    = templateCliente($nome, $curso, $data_br, (string)$agendamento_id, $gcal_link);
     $mail->AltBody = "Olá, {$nome}! Recebemos seu agendamento para o curso {$curso} com formatura em {$data_br}. "
                    . "O Raúl entrará em contato em breve. Pedido #{$agendamento_id}";
     $mail->send();
