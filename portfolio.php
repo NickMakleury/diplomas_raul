@@ -5,56 +5,34 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Portafolio Completo | Diplomas Raúl</title>
-  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/style.css?v=<?= time() ?>" />
   <link href="https://fonts.googleapis.com/css2?family=IMFellFrenchCanon&family=Great+Vibes&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     /* Estilos extras específicos para o portfólio completo */
+    main {
+      background: radial-gradient(circle at top, rgba(10, 17, 40, 0.8), #07101f 70%);
+      min-height: 100vh;
+      padding-bottom: 60px;
+    }
     .portfolio-page-header {
-      padding-top: 150px;
-      padding-bottom: 50px;
+      padding-top: 160px;
+      padding-bottom: 60px;
       text-align: center;
     }
     .portfolio-page-header h1 {
       font-family: 'IMFellFrenchCanon', serif;
-      font-size: 3.5rem;
+      font-size: 4.5rem;
       color: #fff;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
+      text-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
     .portfolio-page-header p {
-      color: rgba(255, 255, 255, 0.7);
-      font-size: 1.1rem;
-      max-width: 600px;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 1.15rem;
+      max-width: 650px;
       margin: 0 auto;
-    }
-    .portfolio-full-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 24px;
-      padding: 0 5%;
-      margin-bottom: 80px;
-    }
-    .portfolio-item {
-      position: relative;
-      border-radius: 12px;
-      overflow: hidden;
-      aspect-ratio: 4/5;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-      transition: transform 0.4s ease, box-shadow 0.4s ease;
-      background: #061326;
-    }
-    .portfolio-item:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 15px 40px rgba(224, 109, 36, 0.2);
-    }
-    .portfolio-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.6s ease;
-    }
-    .portfolio-item:hover img {
-      transform: scale(1.05);
+      line-height: 1.6;
     }
     .portfolio-back-btn {
       display: inline-flex;
@@ -144,7 +122,6 @@
     </div>
     <nav class="menu">
       <a href="index.php">Volver al Inicio</a>
-      <a href="agendar.php">Agendar</a>
     </nav>
     <a href="agendar.php" class="btn-header btn-agendar">Reservar Sesión</a>
   </header>
@@ -161,15 +138,17 @@
 
     <div class="portfolio-full-grid animate-slide-up">
       <?php
-      $images = [
-        'menina1.png', 'menina2.png', 'menina3.png', 'menina4.png', 'menina5.png', 'menina6.png',
-        'menino1.png', 'menino2.png', 'menino3.png', 'foto1.jpg', 'foto2.jpg', 'foto3.jpg'
-      ];
-      foreach ($images as $img): ?>
+      $files = glob('assets/imagem/portfolio/*.{jpg,jpeg,png,gif,webp}', GLOB_BRACE);
+      if (empty($files)): ?>
+        <p style="text-align:center; color:rgba(255,255,255,0.5); grid-column: 1/-1;">Nenhuma foto no portfólio.</p>
+      <?php else:
+        foreach ($files as $file): 
+          $img = basename($file);
+      ?>
         <div class="portfolio-item">
-          <img src="assets/imagem/<?= $img ?>" alt="Muestra de portafolio" loading="lazy" />
+          <img src="assets/imagem/portfolio/<?= $img ?>" alt="Muestra de portafolio" loading="lazy" />
         </div>
-      <?php endforeach; ?>
+      <?php endforeach; endif; ?>
     </div>
   </main>
 
@@ -190,6 +169,6 @@
     </div>
   </div>
 
-  <script src="assets/js/script.js"></script>
+  <script src="assets/js/script.js?v=<?= time() ?>"></script>
 </body>
 </html>

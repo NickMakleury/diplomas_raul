@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Diplomas Raúl</title>
-  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/style.css?v=<?= time() ?>" />
   <link href="https://fonts.googleapis.com/css2?family=IMFellFrenchCanon&family=Great+Vibes&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
@@ -30,7 +30,6 @@
       <a href="#servicos">Servicios</a>
       <a href="#portfolio">Portafolio</a>
       <a href="#sobre">Sobre Nosotros</a>
-      <a href="agendar.php">Agendar</a>
       <a href="#contato">Contacto</a>
     </nav>
     <a href="agendar.php" class="btn-header btn-agendar">
@@ -370,15 +369,17 @@
       </div>
       <div class="portfolio-full-grid">
         <?php
-        $images = [
-          'menina1.png', 'menina2.png', 'menina3.png', 'menina4.png', 'menina5.png', 'menina6.png',
-          'menino1.png', 'menino2.png', 'menino3.png', 'foto1.jpg', 'foto2.jpg', 'foto3.jpg'
-        ];
-        foreach ($images as $img): ?>
+        $files = glob('assets/imagem/portfolio/*.{jpg,jpeg,png,gif,webp}', GLOB_BRACE);
+        if (empty($files)): ?>
+          <p style="text-align:center; color:rgba(255,255,255,0.5); grid-column: 1/-1;">Nenhuma foto no portfólio.</p>
+        <?php else:
+          foreach ($files as $file): 
+            $img = basename($file);
+        ?>
           <div class="portfolio-item">
-            <img src="assets/imagem/<?= $img ?>" alt="Muestra de portafolio" loading="lazy" />
+            <img src="assets/imagem/portfolio/<?= $img ?>" alt="Muestra de portafolio" loading="lazy" />
           </div>
-        <?php endforeach; ?>
+        <?php endforeach; endif; ?>
       </div>
     </div>
   </div>
@@ -391,7 +392,7 @@
     </div>
   </div>
 
-  <script src="assets/js/script.js"></script>
+  <script src="assets/js/script.js?v=<?= time() ?>"></script>
 </body>
 
 </html>

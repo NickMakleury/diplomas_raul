@@ -424,7 +424,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightbox-img');
     const closeLightbox = document.getElementById('lightbox-close');
-    const items = document.querySelectorAll('.portfolio-item img');
+    const items = document.querySelectorAll('.portfolio-item img, .portfolio-card img');
 
     if (btnOpen && modalPortfolio) {
       btnOpen.addEventListener('click', (e) => {
